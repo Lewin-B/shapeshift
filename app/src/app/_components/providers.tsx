@@ -2,10 +2,10 @@
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { SessionProvider } from "next-auth/react";
-import { type ThemeProviderProps } from "next-themes/dist/types";
 import { TRPCReactProvider } from "~/trpc/react";
 import type { Session } from "next-auth";
 
+type ThemeProviderProps = React.ComponentProps<typeof NextThemesProvider>;
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
