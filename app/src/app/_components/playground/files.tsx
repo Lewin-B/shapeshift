@@ -10,7 +10,7 @@ export const figureFile = `"use client";
       const groupRef = useRef<THREE.Group | null>(null);
     
       // Load the SVG data from the provided path
-      const svgData = useLoader(SVGLoader, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvuLix8QUIJctPlef32v01kWOf4gRghVyPlg&s");
+      const svgData = useLoader(SVGLoader, "https://upload.wikimedia.org/wikipedia/commons/d/d2/Ghostscript_tiger_%28original_background%29.svg");
       const [idx, setIdx] = useState<number>(100);
     
       useFrame(({ clock }) => {
@@ -65,7 +65,7 @@ export const figureFile = `"use client";
     
         // Optionally compute a scale if you want to fit the SVG into a given size (e.g., 10x10)
         // If you don't need it, just use scale = 1
-        const desiredSize = 150; // or any other dimension
+        const desiredSize = 35; // or any other dimension
         const maxDim = Math.max(globalSize.x, globalSize.y);
         const scale = maxDim > 0 ? desiredSize / maxDim : 1;
     
@@ -153,7 +153,21 @@ export const canvasFile = `
 
 export const appFile = `
     import { CustomCanvas } from "./canvas.tsx"
+    import "./App.css";
+
     export default function App() {
-      return <CustomCanvas />
+    return (
+        <>
+        <div id="canvas-container">
+            <CustomCanvas />
+        </div>
+        </>
+    );
     }
     `;
+
+export const appCssFile = `
+    #canvas-container {
+        height: 800px;
+    }
+`;
