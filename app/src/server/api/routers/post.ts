@@ -42,6 +42,15 @@ export const postRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
+        void bucket.setCorsConfiguration([
+          {
+            origin: ["*"],
+            method: ["GET", "HEAD", "PUT", "POST", "DELETE"], // Allow these HTTP methods
+            responseHeader: ["Content-Type", "x-goog-meta-*"], // Allow these headers to be returned
+            maxAgeSeconds: 3600, // Cache preflight response for 1 hour
+          },
+        ]);
+
         // Decode base64 data
         const fileBuffer = Buffer.from(input.fileData, "base64");
 
