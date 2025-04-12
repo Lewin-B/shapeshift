@@ -1,13 +1,12 @@
 "use client";
 import {
+  SandpackProvider,
   SandpackLayout,
   SandpackCodeEditor,
   SandpackPreview,
-  Sandpack,
 } from "@codesandbox/sandpack-react";
 
 import { buildFigureFile, appFile, canvasFile, appCssFile } from "./files";
-import { gruvboxLight } from "@codesandbox/sandpack-themes";
 
 type SettingsProps = {
   depth: number;
@@ -26,7 +25,7 @@ export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
 
   return (
     <div className="w-full">
-      <Sandpack
+      <SandpackProvider
         files={{
           "/App.js": appFile,
           "/figure.tsx": figureFile,
@@ -41,16 +40,12 @@ export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
             "@react-three/fiber": "^9.1.1",
           },
         }}
-        options={{
-          editorHeight: "100vh",
-          editorWidthPercentage: 40,
-        }}
       >
         <SandpackLayout>
-          <SandpackCodeEditor />
-          <SandpackPreview />
+          <SandpackCodeEditor style={{ height: "100vh" }} />
+          <SandpackPreview style={{ height: "100vh" }} />
         </SandpackLayout>
-      </Sandpack>
+      </SandpackProvider>
     </div>
   );
 }
