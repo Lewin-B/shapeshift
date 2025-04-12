@@ -76,9 +76,9 @@ export default function SvgCard() {
   return (
     <Card
       onClick={() => console.log("click")}
-      className="flex h-auto w-auto justify-center bg-[#030303]"
+      className="flex h-auto w-auto justify-center bg-black/5 rounded-[50px] shadow-[inset_0px_4px_41.099998474121094px_3px_rgba(253,250,250,0.50)]"
     >
-      <CardContent className="flex flex-col items-center justify-center space-y-4 bg-[#030303]">
+      <CardContent className="flex flex-col items-center justify-center space-y-4">
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="flex w-full items-center justify-center">
             <label
@@ -86,7 +86,7 @@ export default function SvgCard() {
               className="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg"
             >
               <div className="flex flex-col items-center justify-center space-y-3 px-10 pt-5 pb-6">
-                <Upload className="h-30 w-30 text-gray-400" />
+                <Upload className="h-30 w-30 text-white-400" />
                 <div className="font-['Instrument Sans'] text-[25px] leading-[30px] font-normal text-white not-italic">
                   Import <span className="text-[#F3B518]">SVG</span>
                 </div>
