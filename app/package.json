@@ -1,4 +1,25 @@
 {
+  "name": "shapeshift",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "check": "next lint && tsc --noEmit",
+    "db:generate": "prisma migrate dev",
+    "db:migrate": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "dev": "next dev --turbo",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "postinstall": "prisma generate",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "preview": "next build && next start",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.2",
     "@codesandbox/sandpack-react": "^2.20.0",

@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"; 
-import { useSelectionStore } from "~/app/_components/editor/editor";
+import { useSelectionStore } from "~/app/_components/canvas/editor";
 import { Edges } from "@react-three/drei";
 import type { ThreeEvent } from "@react-three/fiber";
 

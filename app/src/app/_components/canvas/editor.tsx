@@ -15,7 +15,7 @@ import { Suspense } from "react";
 import { create } from "zustand";
 import { nanoid } from "nanoid";
 
-import Shape from "~/app/editor/shapes/shape";
+import Shape from "~/app/canvas/shapes/shape";
 
 type SelectionStore = {
     selectedId: string | null;
