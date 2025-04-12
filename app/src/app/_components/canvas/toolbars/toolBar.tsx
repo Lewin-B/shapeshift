@@ -13,7 +13,7 @@ export default function Toolbar() {
     return (
         <div className="fixed left-4 top-1/2 -translate-y-1/2 z-10 bg-background border rounded-lg shadow-md p-2 flex flex-col gap-2">
             <AddCubeButton />     
-            <AddSphereButton />   
+            <AddSphereButton />
         </div>
     );
 }

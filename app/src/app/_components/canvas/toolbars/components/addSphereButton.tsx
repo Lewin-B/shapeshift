@@ -16,7 +16,7 @@ export function AddSphereButton({
   active = false
 }: AddSphereButtonProps) {
   const addShape = useShapeStore((state) => state.addShape);
-  
+
   const handleAddSphere = () => {
     addShape("sphere");
   };
