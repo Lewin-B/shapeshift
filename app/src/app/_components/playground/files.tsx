@@ -10,7 +10,7 @@ export const figureFile = `"use client";
       const groupRef = useRef<THREE.Group | null>(null);
     
       // Load the SVG data from the provided path
-      const svgData = useLoader(SVGLoader, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvuLix8QUIJctPlef32v01kWOf4gRghVyPlg&s");
+      const svgData = useLoader(SVGLoader, "https://upload.wikimedia.org/wikipedia/commons/d/d2/Ghostscript_tiger_(original_background).svg");
       const [idx, setIdx] = useState<number>(100);
     
       useFrame(({ clock }) => {
