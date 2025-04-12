@@ -34,7 +34,6 @@ export default function Shape({ id, type, position = [0, 0, 0] }: ShapeProps){
         <mesh onClick={handleClick} position={position}>
             {type === "cube" && <boxGeometry args={[width, length, depth]} />}
             {type === "sphere" && <sphereGeometry args={[radius, 32, 32]} />}
-            {type === "plane" && <planeGeometry args={[width, length]} />}  
             <meshStandardMaterial color={color} wireframe={isSelected} />
 
         </mesh>

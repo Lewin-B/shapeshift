@@ -17,7 +17,7 @@ import { nanoid } from "nanoid";
 
 import Shape from "~/app/_components/canvas/shape";
 import Toolbar from "./toolbars/toolBar";
-import { startTurbopackTraceServer } from "next/dist/build/swc/generated-native";
+import PropertyBar from "./toolbars/propBar";
 
 export type Shape = {
   id: string;
@@ -136,6 +136,7 @@ export default function CanvasEditor() {
   return (
     <div className="h-dvh">
         <Toolbar />
+        <PropertyBar />
         <Canvas camera={{ position: [0, 0, 50] }}>
         <Suspense fallback={<Loading />}>
             <Scene />

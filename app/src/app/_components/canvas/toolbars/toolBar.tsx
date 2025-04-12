@@ -4,7 +4,6 @@ import { Separator } from "@radix-ui/react-separator";
 import { AddCubeButton } from "./components/addCubeButton";
 import { AddSphereButton } from "./components/addSphereButton";
 
-
 export default function Toolbar() {
     const addShape = useShapeStore((state) => state.addShape);
     const removeShape = useShapeStore((state) => state.removeShape);
