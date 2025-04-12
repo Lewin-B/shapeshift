@@ -17,6 +17,7 @@ type SettingsProps = {
   setDepth: (value: number) => void;
   size: number;
   setSize: (value: number) => void;
+  svgUrl: string;
 };
 
 type AppSidebarProps = {

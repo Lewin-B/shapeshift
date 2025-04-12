@@ -13,6 +13,7 @@ type SettingsProps = {
   setDepth: (value: number) => void;
   size: number;
   setSize: (value: number) => void;
+  svgUrl: string;
 };
 
 type ReactPlaygroundProps = {
@@ -20,8 +21,8 @@ type ReactPlaygroundProps = {
 };
 
 export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
-  const { depth, size } = settings;
-  const figureFile = buildFigureFile({ depth, size });
+  const { depth, size, svgUrl } = settings;
+  const figureFile = buildFigureFile({ depth, size, svgUrl });
 
   return (
     <div className="w-full">

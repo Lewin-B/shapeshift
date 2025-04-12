@@ -1,11 +1,18 @@
 "use client";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Card, CardContent } from "~/components/ui/card";
-import { Upload } from "lucide-react";
+import { Upload, ExternalLink } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import { api } from "~/trpc/react";
+import { useRouter } from "next/navigation";
 
 export default function SvgCard() {
   const [file, setFile] = useState<File | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string>("");
+  const [fileUrl, setFileUrl] = useState<string>("");
+  const router = useRouter();
+
+  const uploadMutation = api.post.uploadSVG.useMutation();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -13,9 +20,57 @@ export default function SvgCard() {
     }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
-    console.log("Uploading file:", file);
+
+    if (!file) {
+      setUploadStatus("No file selected");
+      return;
+    }
+
+    try {
+      // Convert the file to base64 for tRPC transmission
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = async () => {
+        if (typeof fileReader.result === "string") {
+          // Upload the file using tRPC mutation
+          try {
+            // Upload the file using tRPC mutation
+            const result = await uploadMutation.mutateAsync({
+              fileName: file.name,
+              contentType: file.type,
+              fileData: fileReader.result.split(",")[1] ?? "", // Remove the data URL prefix
+              fileSize: file.size,
+            });
+
+            // Store the fileUrl in a variable
+            const uploadedFileUrl = result.fileUrl;
+            console.log("Uploaded file URL:", uploadedFileUrl);
+
+            // Update state with the file URL
+            setFileUrl(uploadedFileUrl);
+            setUploadStatus("Upload successful! Redirecting to playground...");
+
+            // Navigate to the playground with the file URL as a query parameter
+            // Using setTimeout to give the user a moment to see the success message
+            setTimeout(() => {
+              const encodedUrl = encodeURIComponent(uploadedFileUrl);
+              void router.push(`/playground?fileUrl=${encodedUrl}`);
+            }, 1500);
+          } catch (error) {
+            console.error("Upload failed:", error);
+            setUploadStatus("Upload failed");
+          }
+        }
+      };
+
+      void router.push(`/playground?fileUrl=${fileUrl}`);
+    } catch (error) {
+      console.error("Error processing file:", error);
+      setUploadStatus(`Error processing file: `);
+    }
   };
 
   return (

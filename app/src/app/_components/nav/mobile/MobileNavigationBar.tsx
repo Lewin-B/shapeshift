@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn, signOut } from "next-auth/react";
+import Image from "next/image";
 
 const OVERLAY_CLASS =
   "absolute left-0 top-16 z-50 flex h-96 w-full flex-col items-center justify-center bg-black/90 bg-opacity-5 shadow-md backdrop-blur-3xl backdrop-filter md:hidden";
@@ -78,8 +79,14 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
         <div>
           <Link href="/">
             <div className="flex flex-row items-center justify-center gap-4 md:hidden">
-              <img src="/pipelines.png" className="h-12 w-12 pr-2" alt="logo" />
-              <h1 className="text-2xl font-bold text-white">pipelines.lol</h1>
+              <Image
+                alt="c"
+                src="/logo.svg"
+                width={0}
+                height={0}
+                className="h-12 w-12 pr-2 transition-colors duration-300"
+              />
+              <h1 className="text-2xl font-bold text-white">ShapeShift</h1>
             </div>
           </Link>
         </div>

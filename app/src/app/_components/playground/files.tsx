@@ -1,9 +1,11 @@
 export const buildFigureFile = ({
   depth,
   size,
+  svgUrl,
 }: {
   depth: number;
   size: number;
+  svgUrl: string;
 }) => {
   const figureFile = `"use client";
     import React, { useRef, useMemo, useState } from "react";
@@ -17,7 +19,7 @@ export const buildFigureFile = ({
       const groupRef = useRef<THREE.Group | null>(null);
     
       // Load the SVG data from the provided path
-      const svgData = useLoader(SVGLoader, "https://upload.wikimedia.org/wikipedia/commons/d/d2/Ghostscript_tiger_%28original_background%29.svg");
+      const svgData = useLoader(SVGLoader,"${svgUrl}");
       const [idx, setIdx] = useState<number>(100);
     
       useFrame(({ clock }) => {

@@ -9,11 +9,14 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { SidebarProvider } from "~/components/ui/sidebar";
+import { useSearchParams } from "next/navigation";
 
 import { AppSidebar } from "~/components/app-sidebar";
 import { useState } from "react";
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const fileUrl = searchParams.get("fileUrl");
   const [depth, setDepth] = useState<number>(0);
   const [size, setSize] = useState<number>(0);
 
@@ -22,6 +25,7 @@ export default function Page() {
     setDepth,
     size,
     setSize,
+    svgUrl: fileUrl ?? "",
   };
 
   return (
