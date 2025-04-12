@@ -6,37 +6,47 @@ import {
   SandpackPreview,
 } from "@codesandbox/sandpack-react";
 
-import { figureFile, appFile, canvasFile } from "./files";
+import { buildFigureFile, appFile, canvasFile, appCssFile } from "./files";
 
-export default function ReactPlayground() {
+type SettingsProps = {
+  depth: number;
+  setDepth: (value: number) => void;
+  size: number;
+  setSize: (value: number) => void;
+  svgUrl: string;
+};
+
+type ReactPlaygroundProps = {
+  settings: SettingsProps;
+};
+
+export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
+  const { depth, size, svgUrl } = settings;
+  const figureFile = buildFigureFile({ depth, size, svgUrl });
+
   return (
-    <SandpackProvider
-      template="react"
-      customSetup={{
-        dependencies: {
-          "@react-three/drei": "^10.0.6",
-          "@react-three/fiber": "^9.1.1",
-        },
-      }}
-      files={{
-        "/App.js": appFile,
-        "/figure.tsx": figureFile,
-        "/canvas.tsx": canvasFile,
-        // "/node_module/@react-three/fiber/package.json": pack,
-        // "/node_module/@react-three/drei/index.cjs.js": {
-        //   hidden: true,
-        //   code: dsRaw,
-        // },
-        // "/node_module/@react-three/fiber/dist/react-three-fiber.cjs.js": {
-        //   hidden: true,
-        //   code: fiber,
-        // },
-      }}
-    >
-      <SandpackLayout>
-        <SandpackCodeEditor />
-        <SandpackPreview />
-      </SandpackLayout>
-    </SandpackProvider>
+    <div className="w-full">
+      <SandpackProvider
+        files={{
+          "/App.js": appFile,
+          "/figure.tsx": figureFile,
+          "/canvas.tsx": canvasFile,
+          "/App.css": appCssFile,
+        }}
+        theme="dark"
+        template="react"
+        customSetup={{
+          dependencies: {
+            "@react-three/drei": "^10.0.6",
+            "@react-three/fiber": "^9.1.1",
+          },
+        }}
+      >
+        <SandpackLayout>
+          <SandpackCodeEditor style={{ height: "100vh" }} />
+          <SandpackPreview style={{ height: "100vh" }} />
+        </SandpackLayout>
+      </SandpackProvider>
+    </div>
   );
 }

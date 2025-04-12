@@ -11,8 +11,10 @@ export const env = createEnv({
       process.env.NODE_ENV === "production"
         ? z.string()
         : z.string().optional(),
-    AUTH_DISCORD_ID: z.string(),
-    AUTH_DISCORD_SECRET: z.string(),
+    GCP_PROJECT_ID: z.string(),
+    GCP_CLIENT_EMAIL: z.string(),
+    GCP_PRIVATE_KEY: z.string(),
+    GCP_BUCKET_NAME: z.string(),
     DATABASE_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -34,8 +36,10 @@ export const env = createEnv({
    */
   runtimeEnv: {
     AUTH_SECRET: process.env.AUTH_SECRET,
-    AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,
-    AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
+    GCP_PROJECT_ID: process.env.GCP_PROJECT_ID,
+    GCP_CLIENT_EMAIL: process.env.GCP_CLIENT_EMAIL,
+    GCP_PRIVATE_KEY: process.env.GCP_PRIVATE_KEY,
+    GCP_BUCKET_NAME: process.env.GCP_BUCKET_NAME,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
   },

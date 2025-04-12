@@ -1,9 +1,14 @@
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Geist } from "next/font/google";
+import { ThemeProvider, NextAuthProvider } from "./_components/providers";
+import { AuthProvider } from "./providers";
+import Navbar from "./_components/nav/Navbar";
+import type { Session } from "next-auth";
+import type React from "react";
+import { Inter } from "next/font/google";
 
-import { TRPCReactProvider } from "~/trpc/react";
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "shapeshift",
@@ -11,18 +16,34 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
+interface RootLayoutProps {
+  children: React.ReactNode;
+  params: {
+    session: Session; // Optional session object
+    [key: string]: unknown; // Any additional props
+  };
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  params: { session },
+}: RootLayoutProps): React.JSX.Element {
   return (
-    <html lang="en" className={`${geist.variable}`}>
-      <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+    <html lang="en">
+      <body className={inter.className}>
+        <NextAuthProvider session={session}>
+          <AuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar />
+              {children}
+            </ThemeProvider>
+          </AuthProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

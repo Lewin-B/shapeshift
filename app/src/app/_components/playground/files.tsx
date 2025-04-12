@@ -1,4 +1,13 @@
-export const figureFile = `"use client";
+export const buildFigureFile = ({
+  depth,
+  size,
+  svgUrl,
+}: {
+  depth: number;
+  size: number;
+  svgUrl: string;
+}) => {
+  const figureFile = `"use client";
     import React, { useRef, useMemo, useState } from "react";
     import { useLoader } from "@react-three/fiber";
     import * as THREE from "three";
@@ -10,7 +19,7 @@ export const figureFile = `"use client";
       const groupRef = useRef<THREE.Group | null>(null);
     
       // Load the SVG data from the provided path
-      const svgData = useLoader(SVGLoader, "https://upload.wikimedia.org/wikipedia/commons/d/d2/Ghostscript_tiger_(original_background).svg");
+      const svgData = useLoader(SVGLoader,"${svgUrl}");
       const [idx, setIdx] = useState<number>(100);
     
       useFrame(({ clock }) => {
@@ -65,7 +74,7 @@ export const figureFile = `"use client";
     
         // Optionally compute a scale if you want to fit the SVG into a given size (e.g., 10x10)
         // If you don't need it, just use scale = 1
-        const desiredSize = 150; // or any other dimension
+        const desiredSize = ${size}; // or any other dimension
         const maxDim = Math.max(globalSize.x, globalSize.y);
         const scale = maxDim > 0 ? desiredSize / maxDim : 1;
     
@@ -83,7 +92,7 @@ export const figureFile = `"use client";
     
           shapes.forEach((shape, shapeIndex) => {
             const extrudeSettings = {
-              depth: 3,
+              depth: ${depth},
             };
             // const geometry = new THREE.ShapeGeometry(shape);
             const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
@@ -116,6 +125,9 @@ export const figureFile = `"use client";
     
     export default SvgFigure;
     `;
+
+  return figureFile;
+};
 
 export const canvasFile = `
     "use client";
@@ -153,7 +165,21 @@ export const canvasFile = `
 
 export const appFile = `
     import { CustomCanvas } from "./canvas.tsx"
+    import "./App.css";
+
     export default function App() {
-      return <CustomCanvas />
+    return (
+        <>
+        <div id="canvas-container">
+            <CustomCanvas />
+        </div>
+        </>
+    );
     }
     `;
+
+export const appCssFile = `
+    #canvas-container {
+        height: 800px;
+    }
+`;
