@@ -12,37 +12,39 @@ import { Scale3D } from "lucide-react";
 
 import { Slider } from "~/components/ui/slider";
 
-export function AppSidebar({
-  size: initialSize,
-  depth: initialDepth,
-}: {
-  size: number;
+type SettingsProps = {
   depth: number;
-}) {
-  const [size, setSize] = useState(initialSize);
-  const [depth, setDepth] = useState(initialDepth);
+  setDepth: (value: number) => void;
+  size: number;
+  setSize: (value: number) => void;
+};
+
+type AppSidebarProps = {
+  settings: SettingsProps;
+};
+
+export function AppSidebar({ settings }: AppSidebarProps) {
+  const { depth, setDepth, size, setSize } = settings;
 
   return (
-    <Sidebar className="w-[37vh] border-r shadow-sm">
-      <SidebarHeader className="border-b p-4 text-center font-semibold">
-        <h1 className="text-xl">Control Panel</h1>
+    <Sidebar className="w-[37vh] border-r border-[#F3B518] shadow-sm">
+      <SidebarHeader className="border-b border-[#F3B518] bg-[#030303] p-4 text-center font-semibold">
+        <h1 className="text-xl text-[#F3B518]">Control Panel</h1>
       </SidebarHeader>
-      <SidebarContent className="w-full space-y-6 p-4">
-        <Card className="transition-all hover:shadow-md">
+      <SidebarContent className="w-full space-y-6 bg-[#030303] p-4">
+        <Card className="border-[#F3B518] bg-[#030303] transition-all hover:shadow-md">
           <CardHeader className="pb-2">
-            <h2 className="flex items-center space-x-3 text-lg font-medium">
-              <Scale3D className="text-blue-500" size={20} />
-              <span>Appearance</span>
+            <h2 className="flex items-center justify-center space-x-3 text-lg font-medium">
+              <Scale3D className="text-[#F3B518]" size={20} />
+              <span className="text-[#F3B518]">Appearance</span>
             </h2>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 text-[#F3B518]">
             {/* Size Slider */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium text-gray-700">Size</h4>
-                <span className="text-xs font-medium text-gray-500">
-                  {size}%
-                </span>
+                <h4 className="text-sm font-medium">Size</h4>
+                <span className="text-xs font-medium">{size}%</span>
               </div>
               <Slider
                 value={[size]}
@@ -56,10 +58,8 @@ export function AppSidebar({
             {/* Depth Slider */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium text-gray-700">Depth</h4>
-                <span className="text-xs font-medium text-gray-500">
-                  {depth}%
-                </span>
+                <h4 className="text-sm font-medium">Depth</h4>
+                <span className="text-xs font-medium">{depth}%</span>
               </div>
               <Slider
                 value={[depth]}

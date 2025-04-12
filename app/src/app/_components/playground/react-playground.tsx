@@ -6,9 +6,24 @@ import {
   Sandpack,
 } from "@codesandbox/sandpack-react";
 
-import { figureFile, appFile, canvasFile, appCssFile } from "./files";
+import { buildFigureFile, appFile, canvasFile, appCssFile } from "./files";
+import { gruvboxLight } from "@codesandbox/sandpack-themes";
 
-export default function ReactPlayground() {
+type SettingsProps = {
+  depth: number;
+  setDepth: (value: number) => void;
+  size: number;
+  setSize: (value: number) => void;
+};
+
+type ReactPlaygroundProps = {
+  settings: SettingsProps;
+};
+
+export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
+  const { depth, size } = settings;
+  const figureFile = buildFigureFile({ depth, size });
+
   return (
     <div className="w-full">
       <Sandpack
@@ -18,6 +33,7 @@ export default function ReactPlayground() {
           "/canvas.tsx": canvasFile,
           "/App.css": appCssFile,
         }}
+        theme="dark"
         template="react"
         customSetup={{
           dependencies: {
