@@ -11,7 +11,7 @@ type ShapeProps = {
     position?: [number, number, number];
 }
 
-export default function Shape({ id, type }: ShapeProps){
+export default function Shape({ id, type, position = [0, 0, 0] }: ShapeProps){
     // id of the hshape for selection
     const selectedId = useSelectionStore((set) => set.selectedId);
     const select = useSelectionStore((set) => set.select);
@@ -31,7 +31,7 @@ export default function Shape({ id, type }: ShapeProps){
     }
 
     return(
-        <mesh onClick={handleClick}>
+        <mesh onClick={handleClick} position={position}>
             {type === "cube" && <boxGeometry args={[width, length, depth]} />}
             {type === "sphere" && <sphereGeometry args={[radius, 32, 32]} />}
             {type === "plane" && <planeGeometry args={[width, length]} />}  

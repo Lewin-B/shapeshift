@@ -16,6 +16,8 @@ import { create } from "zustand";
 import { nanoid } from "nanoid";
 
 import Shape from "~/app/_components/canvas/shape";
+import Toolbar from "./toolbars/toolBar";
+import { startTurbopackTraceServer } from "next/dist/build/swc/generated-native";
 
 export type Shape = {
   id: string;
@@ -35,19 +37,52 @@ type ShapeStore = {
   updateShape: (id: string, updates: Partial<Shape>) => void;
 }
 
+function getAvailablePosition(shapes: Shape[], type: "cube" | "sphere" | "plane"): [number, number, number] {
+  // If no shapes exist, return default position
+  if (shapes.length === 0) {
+    return [0, 0, 0];
+  }
+
+    // Calculate the size of the new shape
+    const newShapeSize = type === "sphere" 
+    ? 24 // Diameter for sphere
+    : 25; // Width/length for cube and plane
+  
+  // Start with a position to the right of all existing shapes
+  let maxX = 0;
+  
+  shapes.forEach(shape => {
+    // Get the rightmost edge of the shape
+    const shapeX = (shape.position?.[0] || 0);
+    const shapeSize = shape.type === "sphere" 
+      ? (shape.radius || 12) * 2
+      : (shape.width || 25);
+    
+    const rightEdge = shapeX + shapeSize/2;
+    maxX = Math.max(maxX, rightEdge);
+  });
+  
+  // Position the new shape to the right with a small gap
+  return [maxX + newShapeSize/2 + 5, 0, 0];
+}
+
 export const useShapeStore = create<ShapeStore>((set) => ({
   shapes: [],
   addShape: (type) => 
-    set((state) => ({ 
-      shapes: [...state.shapes, { 
-        id: nanoid(), 
-        type,
-        position: [0, 0, 0],
-        ...(type === "cube" ? { width: 25, length: 25, depth: 25 } : {}),
-        ...(type === "sphere" ? { radius: 12 } : {}),
-        ...(type === "plane" ? { width: 25, length: 25 } : {}),
-      }] 
-    })),
+    set((state) => {
+      const newPosition = getAvailablePosition(state.shapes, type);
+      
+      return { 
+        shapes: [...state.shapes, { 
+          id: nanoid(), 
+          type,
+          position: newPosition,
+          ...(type === "cube" ? { width: 25, length: 25, depth: 25 } : {}),
+          ...(type === "sphere" ? { radius: 12 } : {}),
+          ...(type === "plane" ? { width: 25, length: 25 } : {}),
+        }]
+      };
+    }),
   removeShape: (id) => 
     set((state) => ({ 
       shapes: state.shapes.filter(shape => shape.id !== id) 
@@ -82,11 +117,12 @@ const Scene = () => {
 
   return (
     <group onPointerMissed={() => clearSelection()}>
-      <OrbitControls enableZoom={true} enablePan={false} />
+      <OrbitControls enableZoom={true} enablePan={true} />
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
       {shapes.map((shape) => (
         <Shape 
+          key={shape.id}
           id={shape.id} 
           type={shape.type} 
           position={shape.position}
@@ -98,14 +134,13 @@ const Scene = () => {
 
 export default function CanvasEditor() {
   return (
-    <div>
-      <div className="h-dvh">
-          <Canvas camera={{ position: [0, 0, 50] }}>
-          <Suspense fallback={<Loading />}>
-              <Scene />
-          </Suspense>
-          </Canvas>
-      </div>
+    <div className="h-dvh">
+        <Toolbar />
+        <Canvas camera={{ position: [0, 0, 50] }}>
+        <Suspense fallback={<Loading />}>
+            <Scene />
+        </Suspense>
+        </Canvas>
     </div>
   );
 };
