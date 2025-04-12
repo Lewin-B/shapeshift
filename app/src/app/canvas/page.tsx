@@ -1,5 +1,9 @@
-import CanvasEditor from "../_components/canvas/editor";
+import CanvasEditor from "../_components/canvas/canvasEditor";
 
 export default function page(){
-    return(<CanvasEditor />);
+    return(
+        <div>
+            <CanvasEditor />
+        </div>
+    );
 }
