@@ -49,31 +49,31 @@ export default function Page() {
 
   return (
     <Suspense>
-      <div className="flex items-center justify-center">
+      <div className="flex h-screen justify-center pt-20 bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_35%,_#030303_64%,_#242015_86%)] overflow-hidden">
         <SidebarProvider>
-          <div className="w-1/4">
+          <div className="w-80 justify-self-center">
             <AppSidebar settings={settings} />
           </div>
-          <Tabs defaultValue="React" className="w-full bg-[#030303]">
-            <TabsList className="bg-[#030303] text-[#F3B518]">
+          <Tabs defaultValue="React" className="ml-10 mr-10 w-290 flex">
+            <TabsList className="text-[#FFFFFF] flex w-full justify-center bg-[#262013]">
               <TabsTrigger
-                className="bg-[#030303] text-[#F3B518]"
+                className="text-[#F3B518]"
                 value="React"
               >
                 React
               </TabsTrigger>
               <TabsTrigger
                 value="Vanilla"
-                className="bg-[#030303] text-[#F3B518]"
+                className="text-[#F3B518]"
               >
                 Vanilla
               </TabsTrigger>
             </TabsList>
             <TabsContent value="React">
-              <Card className="border-[#F3B518] bg-[#030303]">
-                <CardHeader className="bg-[#030303] text-[#F3B518]">
+              <Card className="shadow-[inset_0px_4px_22.600000381469727px_12px_rgba(0,0,0,0.49)]">
+                <CardHeader className="text-[#F3B518]">
                   <CardTitle>Playground</CardTitle>
-                  <CardDescription className="text-[#F3B518]">
+                  <CardDescription className="text-[#FFFFFF]">
                     Make changes to your react component export when done.
                   </CardDescription>
                 </CardHeader>

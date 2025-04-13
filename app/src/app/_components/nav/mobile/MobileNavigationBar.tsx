@@ -5,25 +5,22 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
+import type { LinkProps } from "next/link";
 
 const OVERLAY_CLASS =
   "absolute left-0 top-16 z-50 flex h-96 w-full flex-col items-center justify-center bg-black/90 bg-opacity-5 shadow-md backdrop-blur-3xl backdrop-filter md:hidden";
 
-interface MobileNavLinkProps {
-  to: string;
+interface MobileNavLinkProps extends LinkProps {
   children: React.ReactNode;
   className?: string;
-  [key: string]: unknown;
 }
 
 const MobileNavLink: React.FC<MobileNavLinkProps> = ({
-  to,
   children,
   className,
   ...props
 }) => (
   <Link
-    href={to}
     className={className ?? "pb-7 text-xl font-medium text-white uppercase"}
     {...props}
   >
@@ -110,11 +107,11 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
 
           <ul onClick={() => toggleMobileNavbar(!mobileNavbar)}>
             <div className={OVERLAY_CLASS}>
-              <MobileNavLink to={MOBILE_ROUTES.HOME}>About</MobileNavLink>
+              <MobileNavLink href={MOBILE_ROUTES.HOME}>About</MobileNavLink>
 
-              <MobileNavLink to={MOBILE_ROUTES.SEARCH}>Search</MobileNavLink>
+              <MobileNavLink href={MOBILE_ROUTES.SEARCH}>Search</MobileNavLink>
 
-              <MobileNavLink to={MOBILE_ROUTES.DISCOVER}>
+              <MobileNavLink href={MOBILE_ROUTES.DISCOVER}>
                 Discover
               </MobileNavLink>
 
@@ -126,17 +123,17 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
                 <>
                   {user.email ? (
                     <>
-                      <MobileNavLink to={MOBILE_ROUTES.USER}>
+                      <MobileNavLink href={MOBILE_ROUTES.USER}>
                         Profile
                       </MobileNavLink>
 
-                      <MobileNavLink to={MOBILE_ROUTES.EDIT}>
+                      <MobileNavLink href={MOBILE_ROUTES.EDIT}>
                         Edit Profile
                       </MobileNavLink>
                     </>
                   ) : (
                     <>
-                      <MobileNavLink to={MOBILE_ROUTES.EDIT}>
+                      <MobileNavLink href={MOBILE_ROUTES.EDIT}>
                         Create Profile
                       </MobileNavLink>
                     </>

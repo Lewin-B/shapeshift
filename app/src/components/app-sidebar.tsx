@@ -84,21 +84,21 @@ export function AppSidebar({ settings }: AppSidebarProps) {
     "group.position.z = Math.sin(clock.elapsedTime * 5) * 1.5;";
 
   return (
-    <Sidebar className="w-[37vh] border-r border-[#F3B518] shadow-sm">
-      <SidebarHeader className="border-b border-[#F3B518] bg-[#030303] p-4 text-center font-semibold">
-        <h1 className="text-xl text-[#F3B518]">Control Panel</h1>
+    <Sidebar className="w-80 pt-17">
+      <SidebarHeader className="border-b border-[#F3B518] p-4 text-center font-semibold bg-linear-to-r from-[#030303] to-[#262013]">
+        <h1 className="text-xl text-[#FFFFFF]">Control Panel</h1>
       </SidebarHeader>
-      <SidebarContent className="w-full space-y-6 bg-[#030303] p-4">
-        <Card className="border-[#F3B518] bg-[#030303] transition-all hover:shadow-md">
+      <SidebarContent className="w-full space-y-6 p-4 bg-linear-to-r from-[#262013] to-[#030303]">
+        <Card className="border-[#F3B518] transition-all hover:shadow-md">
           <CardHeader className="pb-2">
             <h2 className="flex items-center justify-center space-x-3 text-lg font-medium">
-              <Scale3D className="text-[#F3B518]" size={20} />
-              <span className="text-[#F3B518]">Appearance</span>
+              <Scale3D className="text-[#FFD874]" size={20} />
+              <span className="text-[#FFD874]">Appearance</span>
             </h2>
           </CardHeader>
           <CardContent className="space-y-6 text-[#F3B518]">
             {/* Size Slider */}
-            <div className="space-y-2">
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="text-sm font-medium">Size</h4>
                 <span className="text-xs font-medium">{size}%</span>

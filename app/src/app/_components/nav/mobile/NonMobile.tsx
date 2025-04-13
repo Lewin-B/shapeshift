@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
+import type { LinkProps } from "next/link";
 
 // Define routes as constants
 export const ROUTES = {
@@ -13,37 +14,38 @@ export const ROUTES = {
 };
 
 // Props for CustomNavLink component
-interface CustomNavLinkProps {
-  to: string;
+interface CustomNavLinkProps extends LinkProps {
   children: React.ReactNode;
   hovering?: boolean;
-  [key: string]: unknown; // Changed from any to unknown for better type safety
+  className: string;
+  onMouseLeave?: () => void;
 }
 
 // Custom navigation link component
 export const CustomNavLink: React.FC<CustomNavLinkProps> = ({
-  to,
   children,
   hovering,
+  onMouseEnter,
+  onMouseLeave,
+  className,
   ...props
 }) => {
   const pathname = usePathname();
-  const isActive = pathname === to;
+  const isActive = props.href == pathname;
 
   return (
     <Link
-      href={to}
       className={`${
         isActive
           ? `${
               isActive && !hovering ? "underline-force highlight" : ""
-            } hover:text-pipeline-blue-200 relative flex h-full cursor-default items-center justify-center px-4 text-center text-white uppercase transition-colors duration-300`
-          : "underline-hover hover:text-pipeline-blue-200 relative flex h-full items-center justify-center px-4 text-center text-white uppercase transition-colors duration-300"
+            } hover:text-pipeline-blue-200 relative flex h-full cursor-default items-center justify-center px-4 text-center uppercase transition-colors duration-300 ${className}`
+          : `underline-hover hover:text-pipeline-blue-200 relative flex h-full items-center justify-center px-4 text-center uppercase transition-colors duration-300 ${className}`
       }`}
       {...props}
     >
       {children}
-      <span className="absolute bottom-0 left-0 h-1 w-0 bg-white transition-all duration-300 ease-in-out hover:w-full"></span>
+      <span className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-300 ease-in-out hover:w-full"></span>
     </Link>
   );
 };
@@ -69,7 +71,7 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
     <div className="mx-12 hidden h-full flex-row items-center justify-between text-center md:flex">
       {/* Logo on the left */}
       <Link href="/">
-        <div className="flex flex-row items-center justify-center gap-4">
+        <div className="flex flex-row items-center justify-center gap-0">
           <Image
             alt="c"
             src="/logo.svg"
@@ -84,7 +86,7 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
             onMouseEnter={() => setHovering2((prev) => !prev)}
             onMouseLeave={() => setHovering2((prev) => !prev)}
           >
-            <span className="font-instrument text-[40px] leading-[49px] font-semibold text-[#FFD874]">
+            <span className="font-instrument text-[30px] leading-[49px] font-semibold text-[#FFD874]">
               ShapeShift
             </span>
           </h1>
@@ -94,18 +96,20 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
       {/* Navigation links and auth buttons all on the right */}
       <div className="flex flex-row items-center justify-end gap-4">
         <CustomNavLink
-          to={ROUTES.playground}
+          href={ROUTES.playground}
           onMouseEnter={() => setHovering((prev) => !prev)}
           onMouseLeave={() => setHovering((prev) => !prev)}
           hovering={hovering}
+          className="hover:text-[#F3B518]"
         >
           Playground
         </CustomNavLink>
         <CustomNavLink
-          to={ROUTES.canvas}
-          onMouseEnter={() => setHovering((prev) => !prev)}
-          onMouseLeave={() => setHovering((prev) => !prev)}
+          href={ROUTES.canvas}
+          onMouseEnter={() => setHovering2((prev) => !prev)}
+          onMouseLeave={() => setHovering2((prev) => !prev)}
           hovering={hovering}
+          className="hover:text-[#F3B518]"
         >
           Canvas
         </CustomNavLink>
@@ -115,10 +119,10 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
             onClick={(e) => {
               console.log("Sign in");
             }}
-            className="relative flex h-full items-center justify-center rounded-lg px-8 py-2 font-medium text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10"
+            className="relative flex h-full items-center justify-center rounded-lg px-8 py-2 font-medium text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10 bg-[#030303]"
           >
             Login
-            <span className="absolute bottom-0 left-0 h-1 w-0 bg-white transition-all duration-300 ease-in-out hover:w-full"></span>
+            <span className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-300 ease-in-out hover:w-full"></span>
           </button>
         )}
 
@@ -129,7 +133,7 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
               className="relative flex h-full items-center justify-center rounded-lg px-8 py-2 font-normal text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10"
             >
               Edit Profile
-              <span className="absolute bottom-0 left-0 h-1 w-0 bg-white transition-all duration-300 ease-in-out hover:w-full"></span>
+              <span className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-300 ease-in-out hover:w-full"></span>
             </Link>
 
             <button
@@ -137,7 +141,7 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
               className="relative flex h-full items-center justify-center rounded-lg px-8 py-2 font-normal text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10"
             >
               Logout
-              <span className="absolute bottom-0 left-0 h-1 w-0 bg-white transition-all duration-300 ease-in-out hover:w-full"></span>
+              <span className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-300 ease-in-out hover:w-full"></span>
             </button>
           </>
         )}
