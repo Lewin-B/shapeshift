@@ -76,7 +76,7 @@ export default function SvgGeneratorCard() {
             </div>
           </div>
           {prompt && (
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-sm">
                   Generate SVG from prompt
