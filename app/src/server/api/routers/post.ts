@@ -42,6 +42,7 @@ export const postRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
+        console.log("hello");
         void bucket.setCorsConfiguration([
           {
             origin: ["*"],
