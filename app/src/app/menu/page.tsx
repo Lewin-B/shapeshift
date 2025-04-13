@@ -1,4 +1,5 @@
 import SvgCard from "../_components/imports/svg-upload";
+import SvgGeneratorCard from "../_components/imports/generate-svg";
 
 export default function Menu() {
   return (
@@ -6,7 +7,10 @@ export default function Menu() {
       <h1 className="font-['Instrument Sans'] text-5xl leading-[59px] font-bold text-[#FFFFFF] not-italic">
         Upload Your File
       </h1>
-      <SvgCard />
+      <div className="flex justify-evenly space-x-7">
+        <SvgCard />
+        <SvgGeneratorCard />
+      </div>
     </div>
   );
 }
