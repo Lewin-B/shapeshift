@@ -23,7 +23,7 @@ import GLTFImporter from "~/components/gltf-importer";
 
 export type Shape = {
   id: string;
-  type: "cube" | "sphere" | "plane";
+  type: "cube" | "sphere" | "grlf";
   position?: [number, number, number];
   width?: number;
   length?: number;
@@ -34,12 +34,12 @@ export type Shape = {
 
 type ShapeStore = {
   shapes: Shape[];
-  addShape: (type: "cube" | "sphere" | "plane") => void;
+  addShape: (type: "cube" | "sphere" | "grlf") => void;
   removeShape: (id: string) => void;
   updateShape: (id: string, updates: Partial<Shape>) => void;
 }
 
-function getAvailablePosition(shapes: Shape[], type: "cube" | "sphere" | "plane"): [number, number, number] {
+function getAvailablePosition(shapes: Shape[], type: "cube" | "sphere" | "grlf"): [number, number, number] {
   // If no shapes exist, return default position
   if (shapes.length === 0) {
     return [0, 0, 0];
@@ -48,7 +48,7 @@ function getAvailablePosition(shapes: Shape[], type: "cube" | "sphere" | "plane"
     // Calculate the size of the new shape
     const newShapeSize = type === "sphere" 
     ? 24 // Diameter for sphere
-    : 25; // Width/length for cube and plane
+    : 25; // Width/length for cube
   
   // Start with a position to the right of all existing shapes
   let maxX = 0;
@@ -81,7 +81,7 @@ export const useShapeStore = create<ShapeStore>((set) => ({
           position: newPosition,
           ...(type === "cube" ? { width: 25, length: 25, depth: 25 } : {}),
           ...(type === "sphere" ? { radius: 12 } : {}),
-          ...(type === "plane" ? { width: 25, length: 25 } : {}),
+          ...(type === "grlf" ? { width: 25, length: 25 } : {}),
         }]
       };
     }),

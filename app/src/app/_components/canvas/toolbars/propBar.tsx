@@ -5,6 +5,7 @@ import { Separator } from "~/components/ui/separator";
 import { TransformControls } from "./components/transformControls";
 import { DeleteButton } from "./components/deleteButton";
 import { ScaleControls } from "./components/scaleControls";
+import { ColorPicker } from "./components/colorPicker";
 
 export default function PropertyBar() {
   const selectedId = useSelectionStore((state) => state.selectedId);
@@ -31,7 +32,8 @@ export default function PropertyBar() {
       <ScaleControls selectedId={selectedId}/>
       <Separator orientation="vertical" className="h-8" />
       <DeleteButton tooltipSide="top"/>
-
+      <Separator orientation="vertical" className="h-8" />
+      <ColorPicker selectedId={selectedId}/>
     </div>
   );
 }

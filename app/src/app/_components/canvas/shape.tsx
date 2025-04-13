@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useSelectionStore } from "~/app/_components/canvas/canvasEditor";
 import type { ThreeEvent } from "@react-three/fiber";
 
-export type Shape = "cube" | "sphere" | "plane";
+export type Shape = "cube" | "sphere" | "grlf";
 
 type ShapeProps = {
     id: string;
@@ -24,7 +24,7 @@ export default function Shape({
     length: propLength,
     depth: propDepth,
     radius: propRadius,
-    color: propColor
+    color: propColor,
 }: ShapeProps){
     // id of the shape for selection
     const selectedId = useSelectionStore((set) => set.selectedId);
@@ -56,7 +56,6 @@ export default function Shape({
         <mesh onClick={handleClick} position={position}>
             {type === "cube" && <boxGeometry args={[width, length, depth]} />}
             {type === "sphere" && <sphereGeometry args={[radius, 32, 32]} />}
-            {type === "plane" && <planeGeometry args={[width, length]} />}
             <meshStandardMaterial color={color} wireframe={isSelected} />
         </mesh>
     );
