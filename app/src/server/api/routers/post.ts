@@ -22,8 +22,6 @@ const storage = new Storage({
 const bucketName = env.GCP_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
 
-void bucket.makePublic();
-
 export const postRouter = createTRPCRouter({
   uploadSVG: publicProcedure
     .input(
@@ -43,28 +41,14 @@ export const postRouter = createTRPCRouter({
           console.log("hello");
 
           // Set CORS configuration (this is run every time, consider moving outside loop if needed)
-          void bucket.setCorsConfiguration([
-            {
-              origin: ["*"],
-              method: ["GET", "HEAD", "PUT", "POST", "DELETE"],
-              responseHeader: ["Content-Type", "x-goog-meta-*"],
-              maxAgeSeconds: 3600,
-            },
-          ]);
-
-          try {
-            await bucket.setMetadata({
-              iamConfiguration: {
-                uniformBucketLevelAccess: {
-                  enabled: false,
-                },
-              },
-            });
-            console.log("hello 0.5");
-          } catch (err) {
-            console.log("hello 0");
-            console.log("Err: ", err);
-          }
+          // void bucket.setCorsConfiguration([
+          //   {
+          //     origin: ["*"],
+          //     method: ["GET", "HEAD", "PUT", "POST", "DELETE"],
+          //     responseHeader: ["Content-Type", "x-goog-meta-*"],
+          //     maxAgeSeconds: 3600,
+          //   },
+          // ]);
 
           console.log("hello 1");
 
