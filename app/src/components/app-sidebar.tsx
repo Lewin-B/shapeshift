@@ -41,6 +41,7 @@ type AppSidebarProps = {
 
 export function AppSidebar({ settings }: AppSidebarProps) {
   const {
+    svgUrl,
     depth,
     setDepth,
     size,
@@ -58,6 +59,18 @@ export function AppSidebar({ settings }: AppSidebarProps) {
     bounceZ,
     setBounceZ,
   } = settings;
+
+  const values = {
+    depth,
+    size,
+    rotateX,
+    rotateY,
+    rotateZ,
+    bounceX,
+    bounceY,
+    bounceZ,
+    svgUrl,
+  };
 
   const rotateXValue = "group.rotation.x = clock.elapsedTime;";
   const rotateYValue = "group.rotation.y = clock.elapsedTime;";
@@ -227,7 +240,7 @@ export function AppSidebar({ settings }: AppSidebarProps) {
             </div>
           </CardContent>
         </Card>
-        <ExportDialog />
+        <ExportDialog values={values} />
       </SidebarContent>
     </Sidebar>
   );
