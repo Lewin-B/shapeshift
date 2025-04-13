@@ -22,6 +22,8 @@ const storage = new Storage({
 const bucketName = env.GCP_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
 
+void bucket.makePublic();
+
 export const postRouter = createTRPCRouter({
   uploadSVG: publicProcedure
     .input(
@@ -39,8 +41,6 @@ export const postRouter = createTRPCRouter({
       while (attempt < 10) {
         try {
           console.log("hello");
-
-          void bucket.makePublic();
 
           // Set CORS configuration (this is run every time, consider moving outside loop if needed)
           void bucket.setCorsConfiguration([
