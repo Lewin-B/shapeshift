@@ -22,14 +22,6 @@ const storage = new Storage({
 const bucketName = env.GCP_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
 
-void bucket.setMetadata({
-  iamConfiguration: {
-    uniformBucketLevelAccess: {
-      enabled: false,
-    },
-  },
-});
-
 export const postRouter = createTRPCRouter({
   uploadSVG: publicProcedure
     .input(
@@ -51,6 +43,14 @@ export const postRouter = createTRPCRouter({
             maxAgeSeconds: 3600, // Cache preflight response for 1 hour
           },
         ]);
+
+        void bucket.setMetadata({
+          iamConfiguration: {
+            uniformBucketLevelAccess: {
+              enabled: false,
+            },
+          },
+        });
 
         console.log("hello 1");
 
