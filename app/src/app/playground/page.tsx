@@ -49,24 +49,15 @@ export default function Page() {
 
   return (
     <Suspense>
-      <div className="flex h-screen justify-center pt-20 bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_35%,_#030303_64%,_#242015_86%)] overflow-hidden">
+      <div className="flex h-screen justify-center overflow-hidden bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_35%,_#030303_64%,_#242015_86%)] pt-20">
         <SidebarProvider>
           <div className="w-80 justify-self-center">
             <AppSidebar settings={settings} />
           </div>
-          <Tabs defaultValue="React" className="ml-10 mr-10 w-290 flex">
-            <TabsList className="text-[#FFFFFF] flex w-full justify-center bg-[#262013]">
-              <TabsTrigger
-                className="text-[#F3B518]"
-                value="React"
-              >
+          <Tabs defaultValue="React" className="mr-10 ml-10 flex w-290">
+            <TabsList className="flex w-full justify-center bg-[#262013] text-[#FFFFFF]">
+              <TabsTrigger className="text-[#F3B518]" value="React">
                 React
-              </TabsTrigger>
-              <TabsTrigger
-                value="Vanilla"
-                className="text-[#F3B518]"
-              >
-                Vanilla
               </TabsTrigger>
             </TabsList>
             <TabsContent value="React">
@@ -82,7 +73,6 @@ export default function Page() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="Vanilla">soon</TabsContent>
           </Tabs>
         </SidebarProvider>
       </div>

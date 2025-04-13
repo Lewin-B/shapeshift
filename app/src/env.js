@@ -16,6 +16,7 @@ export const env = createEnv({
     GCP_PRIVATE_KEY: z.string(),
     GCP_BUCKET_NAME: z.string(),
     DATABASE_URL: z.string().url(),
+    GEMINI_KEY: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -41,6 +42,7 @@ export const env = createEnv({
     GCP_PRIVATE_KEY: process.env.GCP_PRIVATE_KEY,
     GCP_BUCKET_NAME: process.env.GCP_BUCKET_NAME,
     DATABASE_URL: process.env.DATABASE_URL,
+    GEMINI_KEY: process.env.GEMINI_KEY,
     NODE_ENV: process.env.NODE_ENV,
   },
   /**

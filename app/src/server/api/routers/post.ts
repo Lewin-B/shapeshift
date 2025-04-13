@@ -1,11 +1,8 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 import { env } from "~/env";
 
@@ -21,6 +18,11 @@ const storage = new Storage({
 
 const bucketName = env.GCP_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
+
+const genAI = new GoogleGenerativeAI(env.GEMINI_KEY ?? "c");
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.0-flash-exp-image-generation",
+});
 
 export const postRouter = createTRPCRouter({
   uploadSVG: publicProcedure
@@ -54,7 +56,6 @@ export const postRouter = createTRPCRouter({
 
           // Decode base64 data
           const fileBuffer = Buffer.from(input.fileData, "base64");
-          console.log("hello 2");
 
           // Create a unique filename to prevent overwrites
           const timestamp = Date.now();
@@ -65,7 +66,6 @@ export const postRouter = createTRPCRouter({
 
           // Create a reference to the file in the bucket
           const blob = bucket.file(fileName);
-          console.log("hello 3");
 
           // Set file metadata
           const metadata = {
@@ -141,17 +141,59 @@ export const postRouter = createTRPCRouter({
         message: "Failed to upload file after 10 attempts",
       });
     }),
+  generateSvg: publicProcedure
+    .input(
+      z.object({
+        prompt: z.string().min(1, "Prompt cannot be empty"),
+        filename: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      try {
+        // Generate SVG using Gemini API
+        const result = await model.generateContent(`
+          Generate an SVG image based on the following prompt: "${input.prompt}".
+          Return only the SVG code without any explanation or markdown formatting.
+          Make sure the SVG has proper viewBox attribute and is valid XML.
+        `);
 
-  getLatest: protectedProcedure.query(async ({ ctx }) => {
-    const post = await ctx.db.post.findFirst({
-      orderBy: { createdAt: "desc" },
-      where: { createdBy: { id: ctx.session.user.id } },
-    });
+        const response = result.response;
+        const text = response.text();
 
-    return post ?? null;
-  }),
+        // Extract SVG code from the response (in case there's any extra text)
+        const svgMatch = /<svg[\s\S]*<\/svg>/.exec(text);
+        if (!svgMatch) {
+          throw new Error("Failed to extract valid SVG from Gemini response");
+        }
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
+        const svgContent = svgMatch[0];
+
+        // Generate a unique filename if not provided
+        const filename =
+          input.filename ??
+          `generated-svg-${Date.now()}-${Math.random().toString(36).substring(2, 9)}.svg`;
+
+        // Upload SVG to Google Cloud Storage
+        const file = bucket.file(filename);
+        await file.save(svgContent, {
+          contentType: "image/svg+xml",
+          metadata: {
+            cacheControl: "public, max-age=31536000",
+          },
+        });
+
+        // Generate a public URL for the uploaded file
+        const publicUrl = `https://storage.googleapis.com/${bucketName}/${filename}`;
+
+        return {
+          success: true,
+          filename,
+          publicUrl,
+          svgContent,
+        };
+      } catch (error) {
+        console.error("Error generating or uploading SVG:", error);
+        throw new Error(`Failed to generate or upload SVG: `);
+      }
+    }),
 });
