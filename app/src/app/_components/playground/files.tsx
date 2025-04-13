@@ -306,6 +306,6 @@ export const appFile = `
 
 export const appCssFile = `
     #canvas-container {
-        height: 800px;
+        height: 500px;
     }
 `;

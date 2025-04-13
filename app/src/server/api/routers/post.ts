@@ -89,6 +89,8 @@ export const postRouter = createTRPCRouter({
           // Generate the public URL
           const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
 
+          console.log("Hello is anyone there");
+
           // Store the file reference in your database if needed
           // await prisma.uploadedFile.create({
           //   data: {
@@ -109,6 +111,8 @@ export const postRouter = createTRPCRouter({
         } catch (error) {
           console.error("Error making file public:", error);
 
+          console.log("Error Here");
+
           // If making public fails, generate a signed URL instead
           const [signedUrl] = await blob.getSignedUrl({
             action: "read",
@@ -127,6 +131,7 @@ export const postRouter = createTRPCRouter({
         }
       } catch (error) {
         console.error("Error uploading file to Google Cloud Storage:", error);
+        console.log("No Error Here");
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: `Failed to upload file: `,
