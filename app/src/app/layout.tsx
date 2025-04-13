@@ -14,10 +14,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "shapeshift",
   description: "shapeshift your svgs into cool 3d models",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/logo.svg" }],
 };
 
-interface RootLayoutProps extends LinkProps{
+interface RootLayoutProps extends LinkProps {
   children: React.ReactNode;
   params: {
     session: Session; // Opti onal session object
