@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
+import type { LinkProps } from "next/link";
 
 // Define routes as constants
 export const ROUTES = {
@@ -13,27 +14,27 @@ export const ROUTES = {
 };
 
 // Props for CustomNavLink component
-interface CustomNavLinkProps {
-  to: string;
+interface CustomNavLinkProps extends LinkProps {
   children: React.ReactNode;
   hovering?: boolean;
-  [key: string]: unknown; // Changed from any to unknown for better type safety
+  className: string;
+  onMouseLeave?: () => void;
 }
 
 // Custom navigation link component
 export const CustomNavLink: React.FC<CustomNavLinkProps> = ({
-  to,
   children,
   hovering,
+  onMouseEnter,
+  onMouseLeave,
   className,
   ...props
 }) => {
   const pathname = usePathname();
-  const isActive = pathname === to;
+  const isActive = props.href == pathname;
 
   return (
     <Link
-      href={to}
       className={`${
         isActive
           ? `${
@@ -95,7 +96,7 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
       {/* Navigation links and auth buttons all on the right */}
       <div className="flex flex-row items-center justify-end gap-4">
         <CustomNavLink
-          to={ROUTES.playground}
+          href={ROUTES.playground}
           onMouseEnter={() => setHovering((prev) => !prev)}
           onMouseLeave={() => setHovering((prev) => !prev)}
           hovering={hovering}
@@ -104,7 +105,7 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
           Playground
         </CustomNavLink>
         <CustomNavLink
-          to={ROUTES.canvas}
+          href={ROUTES.canvas}
           onMouseEnter={() => setHovering2((prev) => !prev)}
           onMouseLeave={() => setHovering2((prev) => !prev)}
           hovering={hovering}
