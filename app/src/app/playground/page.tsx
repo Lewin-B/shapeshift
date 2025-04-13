@@ -20,6 +20,12 @@ export default function Page() {
   const fileUrl = searchParams.get("fileUrl");
   const [depth, setDepth] = useState<number>(0);
   const [size, setSize] = useState<number>(0);
+  const [rotateX, setRotationX] = useState<string>("");
+  const [rotateY, setRotationY] = useState<string>("");
+  const [rotateZ, setRotationZ] = useState<string>("");
+  const [bounceX, setBounceX] = useState<string>("");
+  const [bounceY, setBounceY] = useState<string>("");
+  const [bounceZ, setBounceZ] = useState<string>("");
 
   const settings = {
     depth,
@@ -27,6 +33,18 @@ export default function Page() {
     size,
     setSize,
     svgUrl: fileUrl ?? "",
+    rotateX,
+    setRotationX,
+    rotateY,
+    setRotationY,
+    rotateZ,
+    setRotationZ,
+    bounceX,
+    setBounceX,
+    bounceY,
+    setBounceY,
+    bounceZ,
+    setBounceZ,
   };
 
   return (

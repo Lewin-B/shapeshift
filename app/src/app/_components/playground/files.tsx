@@ -2,10 +2,22 @@ export const buildFigureFile = ({
   depth,
   size,
   svgUrl,
+  rotateX,
+  rotateY,
+  rotateZ,
+  bounceX,
+  bounceY,
+  bounceZ,
 }: {
   depth: number;
   size: number;
   svgUrl: string;
+  rotateX: string;
+  rotateY: string;
+  rotateZ: string;
+  bounceX: string;
+  bounceY: string;
+  bounceZ: string;
 }) => {
   const figureFile = `"use client";
     import React, { useRef, useMemo, useState } from "react";
@@ -25,20 +37,13 @@ export const buildFigureFile = ({
       useFrame(({ clock }) => {
         const group = groupRef.current;
         if (group) {
-          // group.rotation.x = clock.elapsedTime;
-          // group.rotation.y = clock.elapsedTime;
-          // group.rotation.z = clock.elapsedTime;
-          const cosValue = Math.abs(Math.cos(clock.elapsedTime * idx));
-          const sinValue = Math.abs(Math.sin(clock.elapsedTime * 2));
-          // if (idx == 0) {
-          //   setIdx(20);
-          // }
-          // if (Math.abs(sinValue - 0) <= 0.01) {
-          //   console.log("sub");
-          //   setIdx(idx - 10);
-          // }
-          // group.position.y = 0.5 + sinValue * idx;
-          // group.position.z = Math.cos(clock.elapsedTime) * 10;
+          ${rotateX}
+          ${rotateY}
+          ${rotateZ}
+          
+          ${bounceX}
+          ${bounceY}
+          ${bounceZ}
         }
       });
     
