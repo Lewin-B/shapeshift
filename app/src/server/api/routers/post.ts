@@ -33,128 +33,127 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        console.log("hello");
-        void bucket.setCorsConfiguration([
-          {
-            origin: ["*"],
-            method: ["GET", "HEAD", "PUT", "POST", "DELETE"], // Allow these HTTP methods
-            responseHeader: ["Content-Type", "x-goog-meta-*"], // Allow these headers to be returned
-            maxAgeSeconds: 3600, // Cache preflight response for 1 hour
-          },
-        ]);
+      let attempt = 0;
+      let lastError;
 
+      while (attempt < 10) {
         try {
-          await bucket.setMetadata({
+          console.log("hello");
+
+          // Set CORS configuration (this is run every time, consider moving outside loop if needed)
+          void bucket.setCorsConfiguration([
+            {
+              origin: ["*"],
+              method: ["GET", "HEAD", "PUT", "POST", "DELETE"],
+              responseHeader: ["Content-Type", "x-goog-meta-*"],
+              maxAgeSeconds: 3600,
+            },
+          ]);
+
+          try {
+            await bucket.setMetadata({
+              iamConfiguration: {
+                uniformBucketLevelAccess: {
+                  enabled: false,
+                },
+              },
+            });
+            console.log("hello 0.5");
+          } catch (err) {
+            console.log("hello 0");
+            console.log("Err: ", err);
+          }
+
+          console.log("hello 1");
+
+          // Decode base64 data
+          const fileBuffer = Buffer.from(input.fileData, "base64");
+          console.log("hello 2");
+
+          // Create a unique filename to prevent overwrites
+          const timestamp = Date.now();
+          const originalName = input.fileName
+            .replace(/\s+/g, "-")
+            .toLowerCase();
+          const fileName = `uploads/${timestamp}-${originalName}`;
+
+          // Create a reference to the file in the bucket
+          const blob = bucket.file(fileName);
+          console.log("hello 3");
+
+          // Set file metadata
+          const metadata = {
+            contentType: input.contentType,
+            metadata: {
+              originalName: input.fileName,
+              uploadedAt: new Date().toISOString(),
+            },
             iamConfiguration: {
               uniformBucketLevelAccess: {
                 enabled: false,
               },
             },
-          });
-          console.log("hello 0.5");
-        } catch (err) {
-          console.log("hello 0");
-          console.log("Err: ", err);
-        }
-
-        console.log("hello 1");
-
-        // Decode base64 data
-        const fileBuffer = Buffer.from(input.fileData, "base64");
-
-        console.log("hello 2");
-
-        // Create a unique filename to prevent overwrites
-        const timestamp = Date.now();
-        const originalName = input.fileName.replace(/\s+/g, "-").toLowerCase();
-        const fileName = `uploads/${timestamp}-${originalName}`;
-
-        // Create a reference to the file in the bucket
-        const blob = bucket.file(fileName);
-
-        console.log("hello 3");
-
-        // Set file metadata
-        const metadata = {
-          contentType: input.contentType,
-          metadata: {
-            originalName: input.fileName,
-            uploadedAt: new Date().toISOString(),
-          },
-          iamConfiguration: {
-            uniformBucketLevelAccess: {
-              enabled: false,
-            },
-          },
-        };
-
-        console.log("hello 4");
-
-        // Upload the file
-        await blob.save(fileBuffer, {
-          metadata,
-          resumable: false,
-        });
-
-        console.log("hello 5");
-
-        // Make the file public
-        try {
-          await blob.makePublic();
-
-          console.log("hello 6");
-
-          // Generate the public URL
-          const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
-
-          console.log("Hello 7");
-
-          // Store the file reference in your database if needed
-          // await prisma.uploadedFile.create({
-          //   data: {
-          //     fileName,
-          //     url: publicUrl,
-          //     contentType: input.contentType,
-          //     size: input.fileSize || 0,
-          //     createdAt: new Date(),
-          //   },
-          // });
-
-          return {
-            success: true,
-            fileName,
-            fileUrl: publicUrl,
-            isPublic: true,
           };
+
+          console.log("hello 4");
+
+          // Upload the file
+          await blob.save(fileBuffer, {
+            metadata,
+            resumable: false,
+          });
+          console.log("hello 5");
+
+          // Make the file public
+          try {
+            await blob.makePublic();
+            console.log("hello 6");
+
+            // Generate the public URL
+            const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
+            console.log("Hello 7");
+
+            // Optionally store the file reference in your database here
+
+            return {
+              success: true,
+              fileName,
+              fileUrl: publicUrl,
+              isPublic: true,
+            };
+          } catch (error) {
+            console.log("Error making file public:", error);
+
+            // If making public fails, generate a signed URL instead
+            const [signedUrl] = await blob.getSignedUrl({
+              action: "read",
+              expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 days
+            });
+
+            return {
+              success: true,
+              fileName,
+              fileUrl: signedUrl,
+              isPublic: false,
+              expiresAt: new Date(
+                Date.now() + 1000 * 60 * 60 * 24 * 7,
+              ).toISOString(),
+            };
+          }
         } catch (error) {
-          console.log("Error");
-          console.error("Error making file public:", error);
-
-          // If making public fails, generate a signed URL instead
-          const [signedUrl] = await blob.getSignedUrl({
-            action: "read",
-            expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 days
-          });
-
-          return {
-            success: true,
-            fileName,
-            fileUrl: signedUrl,
-            isPublic: false,
-            expiresAt: new Date(
-              Date.now() + 1000 * 60 * 60 * 24 * 7,
-            ).toISOString(),
-          };
+          attempt++;
+          lastError = error;
+          console.error(`Attempt ${attempt} failed with error:`, error);
+          // Optionally add a delay before next retry:
+          // await new Promise((resolve) => setTimeout(resolve, 1000));
         }
-      } catch (error) {
-        console.error("Error uploading file to Google Cloud Storage:", error);
-        console.log("No Error Here");
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: `Failed to upload file: `,
-        });
       }
+
+      console.error("Failed after 10 attempts:", lastError);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to upload file after 10 attempts",
+      });
     }),
 
   getLatest: protectedProcedure.query(async ({ ctx }) => {
