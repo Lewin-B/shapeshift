@@ -7,6 +7,7 @@ import Block from "./_components/Block";
 import Image from "next/image";
 import Link from "next/link";
 import { Upload, Clock, SmilePlus, Smile } from "lucide-react";
+import { CustomCanvas } from "./_components/landing/canvas";
 
 import demo from "../../public/demoGif.gif";
 
@@ -39,7 +40,9 @@ export default function Home() {
             />
           </Link>
         </div>
-        <div className="mt-10 md:mt-0">
+        <div className="ml-[-175]">
+          <CustomCanvas />
+          {/*
           <Image
             src="/logo.svg"
             width={216}
@@ -47,6 +50,7 @@ export default function Home() {
             alt="shapeshift logo"
             className="w-36 sm:w-40 md:w-48 lg:w-[216px]"
           />
+          */}
         </div>
       </div>
 
