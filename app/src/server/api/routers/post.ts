@@ -44,13 +44,19 @@ export const postRouter = createTRPCRouter({
           },
         ]);
 
-        void bucket.setMetadata({
-          iamConfiguration: {
-            uniformBucketLevelAccess: {
-              enabled: false,
+        try {
+          await bucket.setMetadata({
+            iamConfiguration: {
+              uniformBucketLevelAccess: {
+                enabled: false,
+              },
             },
-          },
-        });
+          });
+          console.log("hello 0.5");
+        } catch (err) {
+          console.log("hello 0");
+          console.log("Err: ", err);
+        }
 
         console.log("hello 1");
 
