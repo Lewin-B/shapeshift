@@ -27,13 +27,22 @@ import { db } from "~/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = await auth();
-
-  return {
-    db,
-    session,
-    ...opts,
-  };
+  try {
+    const session = await auth();
+    
+    return {
+      db,
+      session,
+      ...opts,
+    };
+  } catch (error) {
+    console.error("Error creating tRPC context:", error);
+    return {
+      db,
+      session: null,
+      ...opts,
+    };
+  }
 };
 
 /**

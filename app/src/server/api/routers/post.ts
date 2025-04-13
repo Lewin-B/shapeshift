@@ -15,7 +15,7 @@ const storage = new Storage({
   projectId: env.GCP_PROJECT_ID,
   credentials: {
     client_email: env.GCP_CLIENT_EMAIL,
-    private_key: env.GCP_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    private_key: env.GCP_PRIVATE_KEY.replace(/\\n/g, "\n"),
   },
 });
 
