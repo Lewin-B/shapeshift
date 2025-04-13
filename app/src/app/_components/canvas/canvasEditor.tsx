@@ -19,7 +19,7 @@ import { useThree } from "@react-three/fiber";
 import Shape from "~/app/_components/canvas/shape";
 import Toolbar from "./toolbars/toolBar";
 import PropertyBar from "./toolbars/propBar";
-import GLTFImporter from "~/components/gltf-importer";
+import { ExportCornerButton } from "./toolbars/components/exportButton";
 
 export type Shape = {
   id: string;
@@ -156,6 +156,7 @@ export default function CanvasEditor() {
             <Scene />
         </Suspense>
         </Canvas>
+        <ExportCornerButton />
     </div>
   );
 };
