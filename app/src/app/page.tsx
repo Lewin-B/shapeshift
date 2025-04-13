@@ -10,6 +10,7 @@ import { Upload, Clock, SmilePlus, Smile } from "lucide-react";
 
 
 import demo from "../../public/demoGif.gif"
+import { CustomCanvas } from "./_components/landing/canvas";
 
 
 export default function Home() {
@@ -29,14 +30,15 @@ export default function Home() {
           </Link>
 
         </div>
-        <div className="mt-8 flex items-center self-auto justify-self-center md:mt-0">
-          <Image
+        <div className="ml-[-150]">
+          <CustomCanvas />
+          {/*<Image
             src="/logo.svg"
             width={216}
             height={376}
             alt="shapeshift logo"
             className="w-48 md:w-[216px]"
-          />
+          />*/}
         </div>
       </div>
 
