@@ -52,8 +52,12 @@ export const postRouter = createTRPCRouter({
           },
         ]);
 
+        console.log("hello 1");
+
         // Decode base64 data
         const fileBuffer = Buffer.from(input.fileData, "base64");
+
+        console.log("hello 2");
 
         // Create a unique filename to prevent overwrites
         const timestamp = Date.now();
@@ -62,6 +66,8 @@ export const postRouter = createTRPCRouter({
 
         // Create a reference to the file in the bucket
         const blob = bucket.file(fileName);
+
+        console.log("hello 3");
 
         // Set file metadata
         const metadata = {
