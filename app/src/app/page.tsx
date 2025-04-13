@@ -26,7 +26,7 @@ export default function Home() {
           />
           <FadeinText
             text={
-              "Convert 2D assets into production-ready 3D models and Three.js code — no pipeline, no friction, just results."
+              "Convert 2D assets into production-ready 3D models and Three.js code. No pipeline, no friction, just results."
             }
             className="font-instrumentsans text-base font-normal text-white sm:text-lg md:text-xl lg:text-2xl"
             delay={600}
