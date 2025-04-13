@@ -13,7 +13,6 @@ import { Slider } from "~/components/ui/slider";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
-import { ExportDialog } from "../app/_components/playground/export-modal";
 
 export type SettingsProps = {
   depth: number;
@@ -85,10 +84,10 @@ export function AppSidebar({ settings }: AppSidebarProps) {
 
   return (
     <Sidebar className="w-80 pt-17">
-      <SidebarHeader className="border-b border-[#F3B518] p-4 text-center font-semibold bg-linear-to-r from-[#030303] to-[#262013]">
+      <SidebarHeader className="border-b border-[#F3B518] bg-linear-to-r from-[#030303] to-[#262013] p-4 text-center font-semibold">
         <h1 className="text-xl text-[#FFFFFF]">Control Panel</h1>
       </SidebarHeader>
-      <SidebarContent className="w-full space-y-6 p-4 bg-linear-to-r from-[#262013] to-[#030303]">
+      <SidebarContent className="w-full space-y-6 bg-linear-to-r from-[#262013] to-[#030303] p-4">
         <Card className="border-[#F3B518] transition-all hover:shadow-md">
           <CardHeader className="pb-2">
             <h2 className="flex items-center justify-center space-x-3 text-lg font-medium">
@@ -240,7 +239,7 @@ export function AppSidebar({ settings }: AppSidebarProps) {
             </div>
           </CardContent>
         </Card>
-        <ExportDialog values={values} />
+        {/* <ExportDialog values={values} /> */}
       </SidebarContent>
     </Sidebar>
   );
