@@ -25,7 +25,7 @@ export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
   const figureFile = buildFigureFile({ depth, size, svgUrl });
 
   return (
-    <div className="w-full">
+    <div className="w-full h-[65vh] ">
       <SandpackProvider
         files={{
           "/App.js": appFile,
@@ -43,8 +43,8 @@ export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
         }}
       >
         <SandpackLayout>
-          <SandpackCodeEditor style={{ height: "100vh" }} />
-          <SandpackPreview style={{ height: "100vh" }} />
+          <SandpackCodeEditor style={{ height: "65vh" }} />
+          <SandpackPreview style={{ height: "65vh" }} />
         </SandpackLayout>
       </SandpackProvider>
     </div>
