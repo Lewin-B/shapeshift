@@ -83,20 +83,26 @@ export const postRouter = createTRPCRouter({
           },
         };
 
+        console.log("hello 4");
+
         // Upload the file
         await blob.save(fileBuffer, {
           metadata,
           resumable: false,
         });
 
+        console.log("hello 5");
+
         // Make the file public
         try {
           await blob.makePublic();
 
+          console.log("hello 6");
+
           // Generate the public URL
           const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
 
-          console.log("Hello is anyone there");
+          console.log("Hello 7");
 
           // Store the file reference in your database if needed
           // await prisma.uploadedFile.create({
@@ -116,9 +122,8 @@ export const postRouter = createTRPCRouter({
             isPublic: true,
           };
         } catch (error) {
+          console.log("Error");
           console.error("Error making file public:", error);
-
-          console.log("Error Here");
 
           // If making public fails, generate a signed URL instead
           const [signedUrl] = await blob.getSignedUrl({
