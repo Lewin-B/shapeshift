@@ -1,7 +1,7 @@
 "use client";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Card, CardContent } from "~/components/ui/card";
-import { Upload, ExternalLink } from "lucide-react";
+import { Upload, ExternalLink, Loader2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ export default function SvgCard() {
   const [file, setFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string>("");
   const [fileUrl, setFileUrl] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const uploadMutation = api.post.uploadSVG.useMutation();
@@ -27,6 +28,8 @@ export default function SvgCard() {
       setUploadStatus("No file selected");
       return;
     }
+
+    setIsLoading(true); // Start loading
 
     try {
       // Convert the file to base64 for tRPC transmission
@@ -64,21 +67,36 @@ export default function SvgCard() {
           } catch (error) {
             console.error("Upload failed:", error);
             setUploadStatus("Upload failed");
+            setIsLoading(false); // End loading on error
           }
         }
       };
-
-      void router.push(`/playground?fileUrl=${fileUrl}`);
     } catch (error) {
       console.error("Error processing file:", error);
       setUploadStatus(`Error processing file: `);
+      setIsLoading(false); // End loading on error
     }
   };
+
+  // If loading, display the loading screen
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
+        <div className="bg-[#262013] p-8 rounded-xl shadow-lg text-center">
+          <Loader2 className="h-12 w-12 text-[#F3B518] animate-spin mx-auto mb-4" />
+          <p className="text-white text-xl font-['Instrument Sans']">
+            Transforming your SVG...
+          </p>
+          <p className="text-[#F3B518] mt-2">{uploadStatus}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Card
       onClick={() => console.log("click")}
-      className="flex h-auto w-auto justify-center rounded-[50px] bg-black/5 shadow-[inset_0px_4px_41.099998474121094px_3px_rgba(253,250,250,0.50)]"
+      className="flex h-auto w-auto justify-center bg-black/5 rounded-[50px] shadow-[inset_0px_4px_41.099998474121094px_3px_rgba(253,250,250,0.50)]"
     >
       <CardContent className="flex flex-col items-center justify-center space-y-4">
         <form onSubmit={handleSubmit} className="grid gap-4">
