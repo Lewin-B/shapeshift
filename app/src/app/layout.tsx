@@ -7,6 +7,7 @@ import Navbar from "./_components/nav/Navbar";
 import type { Session } from "next-auth";
 import type React from "react";
 import { Inter } from "next/font/google";
+import type { LinkProps } from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,11 +17,10 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-interface RootLayoutProps {
+interface RootLayoutProps extends LinkProps{
   children: React.ReactNode;
   params: {
-    session: Session; // Optional session object
-    [key: string]: unknown; // Any additional props
+    session: Session; // Opti onal session object
   };
 }
 

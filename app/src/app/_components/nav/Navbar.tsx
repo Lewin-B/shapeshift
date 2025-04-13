@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 h-16 w-full px-12 sm:p-0 ${mobileNavbar ? "bg-opacity-5 z-50 bg-black/90 shadow-md backdrop-blur-lg backdrop-filter" : "bg-opacity-5 z-50 bg-transparent shadow-md backdrop-blur-lg backdrop-filter"}`}
+        className={`fixed top-0 pt-3 left-0 h-18 w-full px-12 sm:p-0 ${mobileNavbar ? "bg-opacity-5 z-50 bg-black/90 shadow-md backdrop-blur-lg backdrop-filter" : "bg-opacity-5 z-50 bg-transparent shadow-md backdrop-blur-lg backdrop-filter"}`}
       >
         <NonMobileNavbar pfp={""} user={session.data?.user} />
         <MobileNavigationBar
