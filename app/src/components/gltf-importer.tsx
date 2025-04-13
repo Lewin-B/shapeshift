@@ -7,9 +7,10 @@ import { type Scene } from 'three';
 
 type GLTFImporterProps = {
   scene: Scene;
+  url: string
 }
 
-export default function GLTFImporter({ scene }: GLTFImporterProps) {
+export default function GLTFImporter({ scene, url }: GLTFImporterProps) {
   useEffect(() => {
     if (!scene) return;
     
@@ -24,7 +25,7 @@ export default function GLTFImporter({ scene }: GLTFImporterProps) {
     // Load a glTF resource
     loader.load(
       // resource URL
-      'models/gltf/duck/duck.gltf',
+      url,
       // called when the resource is loaded
       function (gltf) {
         scene.add(gltf.scene);
@@ -41,7 +42,7 @@ export default function GLTFImporter({ scene }: GLTFImporterProps) {
     );
     
     return () => {
-      // Cleanup logic if needed
+      // cleanup logic
     };
   }, [scene]);
   

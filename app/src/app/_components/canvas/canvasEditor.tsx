@@ -131,7 +131,12 @@ const Scene = () => {
           position={shape.position}
         />
       ))}
-      <GLTFImporter scene={scene} />
+      {/* UNCOMMENT FOR GLTF IMPORTER, SET URL TO WHATEVER YOU WANT IMPORTED
+      <GLTFImporter 
+        scene={scene} 
+        url="/models/Duck.gltf" 
+      />
+      */}
     </group>
   );
 };
