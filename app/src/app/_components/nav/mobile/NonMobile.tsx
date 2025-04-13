@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import type { LinkProps } from "next/link";
+import { UserDropdown } from "../user-dropdown";
 
 // Define routes as constants
 export const ROUTES = {
@@ -116,8 +117,8 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
 
         {!user && (
           <button
-            onClick={(e) => {
-              console.log("Sign in");
+            onClick={async () => {
+              await signIn("google");
             }}
             className="relative flex h-full items-center justify-center rounded-lg px-8 py-2 font-medium text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10 bg-[#030303]"
           >
@@ -128,21 +129,7 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
 
         {user && (
           <>
-            <Link
-              href="/edit"
-              className="relative flex h-full items-center justify-center rounded-lg px-8 py-2 font-normal text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10"
-            >
-              Edit Profile
-              <span className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-300 ease-in-out hover:w-full"></span>
-            </Link>
-
-            <button
-              onClick={() => signOut()}
-              className="relative flex h-full items-center justify-center rounded-lg px-8 py-2 font-normal text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10"
-            >
-              Logout
-              <span className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-300 ease-in-out hover:w-full"></span>
-            </button>
+            <UserDropdown />
           </>
         )}
       </div>

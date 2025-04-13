@@ -3,9 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import type { LinkProps } from "next/link";
+import { UserDropdown } from "../user-dropdown";
 
 const OVERLAY_CLASS =
   "absolute left-0 top-16 z-50 flex h-96 w-full flex-col items-center justify-center bg-black/90 bg-opacity-5 shadow-md backdrop-blur-3xl backdrop-filter md:hidden";
@@ -116,7 +117,7 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
               </MobileNavLink>
 
               {!user && (
-                <button onClick={() => console.log("sign in")}></button>
+                <button onClick={() => signIn("google")}></button>
               )}
 
               {user && (
@@ -125,10 +126,6 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
                     <>
                       <MobileNavLink href={MOBILE_ROUTES.USER}>
                         Profile
-                      </MobileNavLink>
-
-                      <MobileNavLink href={MOBILE_ROUTES.EDIT}>
-                        Edit Profile
                       </MobileNavLink>
                     </>
                   ) : (
@@ -139,15 +136,7 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
                     </>
                   )}
 
-                  <button
-                    onClick={() => {
-                      console.log("sign in");
-                      router.push("/");
-                    }}
-                    className="mt-4 text-xl font-light text-white uppercase"
-                  >
-                    Logout
-                  </button>
+                  <UserDropdown />
                 </>
               )}
             </div>

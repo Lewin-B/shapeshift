@@ -26,6 +26,8 @@ export default function Page() {
   const [bounceX, setBounceX] = useState<string>("");
   const [bounceY, setBounceY] = useState<string>("");
   const [bounceZ, setBounceZ] = useState<string>("");
+  const [accountSave, setAccountSave] = useState<boolean>(false);
+  const [regularSave, setRegularSave] = useState<boolean>(false);
 
   const settings = {
     depth,
@@ -45,6 +47,10 @@ export default function Page() {
     setBounceY,
     bounceZ,
     setBounceZ,
+    accountSave,
+    setAccountSave,
+    regularSave,
+    setRegularSave
   };
 
   return (

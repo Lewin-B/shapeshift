@@ -1,18 +1,19 @@
 "use client";
+
+import React, { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
 } from "~/components/ui/sidebar";
-
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
-
 import { Scale3D, Rotate3D, Move } from "lucide-react";
-
 import { Slider } from "~/components/ui/slider";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
+import { Button } from "~/components/ui/button";
+import { api } from "~/trpc/react";
 
 export type SettingsProps = {
   depth: number;
@@ -32,9 +33,13 @@ export type SettingsProps = {
   setBounceY: (value: string) => void;
   bounceZ: string;
   setBounceZ: (value: string) => void;
+  accountSave: boolean;
+  setAccountSave: (value: boolean) => void;
+  regularSave: boolean;
+  setRegularSave: (value: boolean) => void;
 };
 
-type AppSidebarProps = {
+export type AppSidebarProps = {
   settings: SettingsProps;
 };
 
@@ -57,30 +62,18 @@ export function AppSidebar({ settings }: AppSidebarProps) {
     setBounceY,
     bounceZ,
     setBounceZ,
+    accountSave,
+    setAccountSave,
+    regularSave,
+    setRegularSave
   } = settings;
-
-  const values = {
-    depth,
-    size,
-    rotateX,
-    rotateY,
-    rotateZ,
-    bounceX,
-    bounceY,
-    bounceZ,
-    svgUrl,
-  };
 
   const rotateXValue = "group.rotation.x = clock.elapsedTime;";
   const rotateYValue = "group.rotation.y = clock.elapsedTime;";
   const rotateZValue = "group.rotation.z = clock.elapsedTime;";
-
-  const bounceXValue =
-    "group.position.x = Math.sin(clock.elapsedTime * 5) * 1.5;";
-  const bounceYValue =
-    "group.position.y = Math.sin(clock.elapsedTime * 5) * 1.5;";
-  const bounceZValue =
-    "group.position.z = Math.sin(clock.elapsedTime * 5) * 1.5;";
+  const bounceXValue = "group.position.x = Math.sin(clock.elapsedTime * 5) * 1.5;";
+  const bounceYValue = "group.position.y = Math.sin(clock.elapsedTime * 5) * 1.5;";
+  const bounceZValue = "group.position.z = Math.sin(clock.elapsedTime * 5) * 1.5;";
 
   return (
     <Sidebar className="w-80 pt-17">
@@ -88,6 +81,12 @@ export function AppSidebar({ settings }: AppSidebarProps) {
         <h1 className="text-xl text-[#FFFFFF]">Control Panel</h1>
       </SidebarHeader>
       <SidebarContent className="w-full space-y-6 bg-linear-to-r from-[#262013] to-[#030303] p-4">
+        <div className="flex flex-row gap-2">
+          <Button onClick={(e) => {
+            e.preventDefault();
+            setRegularSave(!regularSave)
+          }}>Save</Button>
+        </div>
         <Card className="border-[#F3B518] transition-all hover:shadow-md">
           <CardHeader className="pb-2">
             <h2 className="flex items-center justify-center space-x-3 text-lg font-medium">
@@ -110,7 +109,6 @@ export function AppSidebar({ settings }: AppSidebarProps) {
                 className="cursor-pointer"
               />
             </div>
-
             {/* Depth Slider */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -127,8 +125,6 @@ export function AppSidebar({ settings }: AppSidebarProps) {
             </div>
           </CardContent>
         </Card>
-
-        {/* New Animation Card */}
         <Card className="border-[#F3B518] bg-[#030303] transition-all hover:shadow-md">
           <CardHeader className="pb-2">
             <h2 className="flex items-center justify-center space-x-3 text-lg font-medium">
@@ -137,7 +133,6 @@ export function AppSidebar({ settings }: AppSidebarProps) {
             </h2>
           </CardHeader>
           <CardContent className="space-y-6 text-[#F3B518]">
-            {/* Rotation Section */}
             <div className="space-y-4">
               <h3 className="font-medium">Rotation</h3>
               <div className="grid grid-cols-3 gap-4">
@@ -154,7 +149,6 @@ export function AppSidebar({ settings }: AppSidebarProps) {
                     className="border-[#F3B518] data-[state=checked]:bg-[#F3B518] data-[state=checked]:text-black"
                   />
                 </div>
-
                 <div className="flex flex-col items-center space-y-2">
                   <Label htmlFor="rotationY" className="text-sm">
                     Y
@@ -168,7 +162,6 @@ export function AppSidebar({ settings }: AppSidebarProps) {
                     className="border-[#F3B518] data-[state=checked]:bg-[#F3B518] data-[state=checked]:text-black"
                   />
                 </div>
-
                 <div className="flex flex-col items-center justify-center space-y-2">
                   <Label htmlFor="rotationZ" className="text-sm">
                     Z
@@ -184,10 +177,7 @@ export function AppSidebar({ settings }: AppSidebarProps) {
                 </div>
               </div>
             </div>
-
             <Separator className="bg-[#F3B518]/30" />
-
-            {/* Bounce Section */}
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
                 <Move className="text-[#F3B518]" size={16} />
@@ -207,7 +197,6 @@ export function AppSidebar({ settings }: AppSidebarProps) {
                     className="border-[#F3B518] data-[state=checked]:bg-[#F3B518] data-[state=checked]:text-black"
                   />
                 </div>
-
                 <div className="flex flex-col items-center space-y-2">
                   <Label htmlFor="bounceY" className="text-sm">
                     Y
@@ -221,7 +210,6 @@ export function AppSidebar({ settings }: AppSidebarProps) {
                     className="border-[#F3B518] data-[state=checked]:bg-[#F3B518] data-[state=checked]:text-black"
                   />
                 </div>
-
                 <div className="flex flex-col items-center space-y-2">
                   <Label htmlFor="bounceZ" className="text-sm">
                     Z
@@ -239,7 +227,6 @@ export function AppSidebar({ settings }: AppSidebarProps) {
             </div>
           </CardContent>
         </Card>
-        {/* <ExportDialog values={values} /> */}
       </SidebarContent>
     </Sidebar>
   );
