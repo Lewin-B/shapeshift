@@ -29,28 +29,28 @@ export function TransformControls({
   
   // Movement handlers
   const moveLeft = () => {
-    const currentPos = selectedShape.position || [0, 0, 0];
+    const currentPos = selectedShape.position ?? [0, 0, 0];
     updateShape(selectedId, { 
       position: [currentPos[0] - increment, currentPos[1], currentPos[2]] 
     });
   };
   
   const moveRight = () => {
-    const currentPos = selectedShape.position || [0, 0, 0];
+    const currentPos = selectedShape.position ?? [0, 0, 0];
     updateShape(selectedId, { 
       position: [currentPos[0] + increment, currentPos[1], currentPos[2]] 
     });
   };
   
   const moveUp = () => {
-    const currentPos = selectedShape.position || [0, 0, 0];
+    const currentPos = selectedShape.position ?? [0, 0, 0];
     updateShape(selectedId, { 
       position: [currentPos[0], currentPos[1] + increment, currentPos[2]] 
     });
   };
   
   const moveDown = () => {
-    const currentPos = selectedShape.position || [0, 0, 0];
+    const currentPos = selectedShape.position ?? [0, 0, 0];
     updateShape(selectedId, { 
       position: [currentPos[0], currentPos[1] - increment, currentPos[2]] 
     });

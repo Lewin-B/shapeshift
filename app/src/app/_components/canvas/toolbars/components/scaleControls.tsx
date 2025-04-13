@@ -30,27 +30,27 @@ export function ScaleControls({
   
   // Individual dimension controls
   const adjustWidth = (amount: number) => {
-    const currentWidth = selectedShape.width || 25;
+    const currentWidth = selectedShape.width ?? 25;
     const newWidth = Math.max(5, currentWidth + amount);
     updateShape(selectedId, { width: newWidth });
   };
   
   const adjustLength = (amount: number) => {
-    const currentLength = selectedShape.length || 25;
+    const currentLength = selectedShape.length ?? 25;
     const newLength = Math.max(5, currentLength + amount);
     updateShape(selectedId, { length: newLength });
   };
   
   const adjustDepth = (amount: number) => {
     if (selectedShape.type !== "cube") return;
-    const currentDepth = selectedShape.depth || 25;
+    const currentDepth = selectedShape.depth ?? 25;
     const newDepth = Math.max(5, currentDepth + amount);
     updateShape(selectedId, { depth: newDepth });
   };
   
   const adjustRadius = (amount: number) => {
     if (selectedShape.type !== "sphere") return;
-    const currentRadius = selectedShape.radius || 12;
+    const currentRadius = selectedShape.radius ?? 12;
     const newRadius = Math.max(2, currentRadius + amount);
     updateShape(selectedId, { radius: newRadius });
   };

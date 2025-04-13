@@ -27,11 +27,11 @@ export function ColorPicker({ selectedId }: ColorPickerProps) {
           id="color-picker"
           type="color" 
           className="w-8 h-8 cursor-pointer border rounded p-0"
-          value={selectedShape.color || "#ffffff"} 
+          value={selectedShape.color ?? "#ffffff"} 
           onChange={handleColorChange}
         />
         <span className="text-xs font-mono">
-          {selectedShape.color || "#ffffff"}
+          {selectedShape.color ?? "#ffffff"}
         </span>
       </div>
     </div>

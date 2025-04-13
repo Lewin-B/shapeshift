@@ -32,11 +32,11 @@ export default function Shape({
     const isSelected = selectedId === id; // if the shape is already selected
 
     // properties of the shape we want to be able to change
-    const [width, setWidth] = useState(propWidth || 25);
-    const [length, setLength] = useState(propLength || 25);
-    const [depth, setDepth] = useState(propDepth || 25);
-    const [radius, setRadius] = useState(propRadius || 12);
-    const [color, setColor] = useState(propColor || "white");
+    const [width, setWidth] = useState(propWidth ?? 25);
+    const [length, setLength] = useState(propLength ?? 25);
+    const [depth, setDepth] = useState(propDepth ?? 25);
+    const [radius, setRadius] = useState(propRadius ?? 12);
+    const [color, setColor] = useState(propColor ?? "white");
     
     // Update state when props change
     useEffect(() => {

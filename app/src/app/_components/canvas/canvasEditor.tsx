@@ -55,10 +55,10 @@ function getAvailablePosition(shapes: Shape[], type: "cube" | "sphere" | "grlf")
   
   shapes.forEach(shape => {
     // Get the rightmost edge of the shape
-    const shapeX = (shape.position?.[0] || 0);
+    const shapeX = (shape.position?.[0] ?? 0);
     const shapeSize = shape.type === "sphere" 
-      ? (shape.radius || 12) * 2
-      : (shape.width || 25);
+      ? (shape.radius ?? 12) * 2
+      : (shape.width ?? 25);
     
     const rightEdge = shapeX + shapeSize/2;
     maxX = Math.max(maxX, rightEdge);

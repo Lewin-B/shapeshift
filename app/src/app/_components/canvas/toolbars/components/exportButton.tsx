@@ -32,20 +32,20 @@ export function ExportCornerButton() {
     // Add all shapes from the canvas to the export scene
     shapes.forEach((shape) => {
       let geometry;
-      let material = new THREE.MeshStandardMaterial({
-        color: shape.color || 0xffffff
+      const material = new THREE.MeshStandardMaterial({
+        color: shape.color ?? 0xffffff
       });
 
       // Create appropriate geometry based on shape type
       if (shape.type === "cube") {
         geometry = new THREE.BoxGeometry(
-          shape.width || 25, 
-          shape.length || 25, 
-          shape.depth || 25
+          shape.width ?? 25, 
+          shape.length ?? 25, 
+          shape.depth ?? 25
         );
       } else if (shape.type === "sphere") {
         geometry = new THREE.SphereGeometry(
-          shape.radius || 12, 
+          shape.radius ?? 12, 
           32, 
           32
         );
@@ -83,7 +83,7 @@ export function ExportCornerButton() {
         const fileExtension = "glb";
 
         // Create download - handle different return types
-        let blob = new Blob([gltf as ArrayBuffer], { type: "application/octet-stream" });
+        const blob = new Blob([gltf as ArrayBuffer], { type: "application/octet-stream" });
 
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
