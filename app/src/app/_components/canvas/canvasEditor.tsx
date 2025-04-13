@@ -14,10 +14,12 @@ import { OrbitControls, Text } from "@react-three/drei";
 import { Suspense } from "react";
 import { create } from "zustand";
 import { nanoid } from "nanoid";
+import { useThree } from "@react-three/fiber";
 
 import Shape from "~/app/_components/canvas/shape";
 import Toolbar from "./toolbars/toolBar";
 import PropertyBar from "./toolbars/propBar";
+import GLTFImporter from "~/components/gltf-importer";
 
 export type Shape = {
   id: string;
@@ -114,6 +116,7 @@ const Loading = () => {
 const Scene = () => {
   const clearSelection = useSelectionStore((set) => set.clear);
   const shapes = useShapeStore((set) => set.shapes);
+  const { scene } = useThree();
 
   return (
     <group onPointerMissed={() => clearSelection()}>
@@ -128,6 +131,7 @@ const Scene = () => {
           position={shape.position}
         />
       ))}
+      <GLTFImporter scene={scene} />
     </group>
   );
 };
