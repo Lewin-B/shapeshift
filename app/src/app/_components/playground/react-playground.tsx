@@ -8,21 +8,35 @@ import {
 
 import { buildFigureFile, appFile, canvasFile, appCssFile } from "./files";
 
-type SettingsProps = {
-  depth: number;
-  setDepth: (value: number) => void;
-  size: number;
-  setSize: (value: number) => void;
-  svgUrl: string;
-};
+import type { SettingsProps } from "~/components/app-sidebar";
 
 type ReactPlaygroundProps = {
   settings: SettingsProps;
 };
 
 export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
-  const { depth, size, svgUrl } = settings;
-  const figureFile = buildFigureFile({ depth, size, svgUrl });
+  const {
+    depth,
+    size,
+    svgUrl,
+    rotateX,
+    rotateY,
+    rotateZ,
+    bounceX,
+    bounceY,
+    bounceZ,
+  } = settings;
+  const figureFile = buildFigureFile({
+    depth,
+    size,
+    svgUrl,
+    rotateX,
+    rotateY,
+    rotateZ,
+    bounceX,
+    bounceY,
+    bounceZ,
+  });
 
   return (
     <div className="w-full h-[65vh] ">
