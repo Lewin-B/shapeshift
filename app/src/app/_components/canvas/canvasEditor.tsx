@@ -129,6 +129,11 @@ const Scene = () => {
           id={shape.id} 
           type={shape.type} 
           position={shape.position}
+          width={shape.width}
+          length={shape.length}
+          depth={shape.depth}
+          radius={shape.radius}
+          color={shape.color}
         />
       ))}
       {/* UNCOMMENT FOR GLTF IMPORTER, SET URL TO WHATEVER YOU WANT IMPORTED

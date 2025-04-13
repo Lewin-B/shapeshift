@@ -4,6 +4,7 @@ import { useShapeStore, useSelectionStore } from "../canvasEditor";
 import { Separator } from "~/components/ui/separator";
 import { TransformControls } from "./components/transformControls";
 import { DeleteButton } from "./components/deleteButton";
+import { ScaleControls } from "./components/scaleControls";
 
 export default function PropertyBar() {
   const selectedId = useSelectionStore((state) => state.selectedId);
@@ -26,6 +27,8 @@ export default function PropertyBar() {
       <Separator orientation="vertical" className="h-8" />
       
       <TransformControls selectedId={selectedId} />
+      <Separator orientation="vertical" className="h-8" />
+      <ScaleControls selectedId={selectedId}/>
       <Separator orientation="vertical" className="h-8" />
       <DeleteButton tooltipSide="top"/>
 
