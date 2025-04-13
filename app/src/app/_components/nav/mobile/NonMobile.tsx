@@ -25,6 +25,7 @@ export const CustomNavLink: React.FC<CustomNavLinkProps> = ({
   to,
   children,
   hovering,
+  className,
   ...props
 }) => {
   const pathname = usePathname();
@@ -37,8 +38,8 @@ export const CustomNavLink: React.FC<CustomNavLinkProps> = ({
         isActive
           ? `${
               isActive && !hovering ? "underline-force highlight" : ""
-            } hover:text-pipeline-blue-200 relative flex h-full cursor-default items-center justify-center px-4 text-center text-white uppercase transition-colors duration-300`
-          : "underline-hover hover:text-pipeline-blue-200 relative flex h-full items-center justify-center px-4 text-center text-white uppercase transition-colors duration-300"
+            } hover:text-pipeline-blue-200 relative flex h-full cursor-default items-center justify-center px-4 text-center uppercase transition-colors duration-300 ${className}`
+          : `underline-hover hover:text-pipeline-blue-200 relative flex h-full items-center justify-center px-4 text-center uppercase transition-colors duration-300 ${className}`
       }`}
       {...props}
     >
@@ -98,14 +99,16 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
           onMouseEnter={() => setHovering((prev) => !prev)}
           onMouseLeave={() => setHovering((prev) => !prev)}
           hovering={hovering}
+          className="hover:text-[#F3B518]"
         >
           Playground
         </CustomNavLink>
         <CustomNavLink
           to={ROUTES.canvas}
-          onMouseEnter={() => setHovering((prev) => !prev)}
-          onMouseLeave={() => setHovering((prev) => !prev)}
+          onMouseEnter={() => setHovering2((prev) => !prev)}
+          onMouseLeave={() => setHovering2((prev) => !prev)}
           hovering={hovering}
+          className="hover:text-[#F3B518]"
         >
           Canvas
         </CustomNavLink>

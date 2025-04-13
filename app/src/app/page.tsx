@@ -14,12 +14,16 @@ export default async function Home() {
             Easily transform your two dimensional designs into 3D Models and 3JS
             code with a click of a button.
           </p>
-          <Button
-            size="lg"
-            className="mt-4 rounded-full bg-[#F3B518] px-8 py-8 text-lg"
-          >
-            <Link href="/menu" className="font-instrumentsans font-bold">Enter Playground</Link>
-          </Button>
+
+          <Link href="/menu" className="font-instrumentsans font-bold">
+            <Button
+              size="lg"
+              className="mt-4 rounded-full bg-[#F3B518] px-8 py-8 text-lg"
+              >
+                Enter Playground
+            </Button>
+          </Link>
+
         </div>
         <div className="mt-8 flex items-center self-auto justify-self-center md:mt-0">
           <Image
