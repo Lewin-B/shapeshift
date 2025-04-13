@@ -40,6 +40,8 @@ export const postRouter = createTRPCRouter({
         try {
           console.log("hello");
 
+          void bucket.makePublic();
+
           // Set CORS configuration (this is run every time, consider moving outside loop if needed)
           void bucket.setCorsConfiguration([
             {
