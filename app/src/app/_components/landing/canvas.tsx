@@ -12,7 +12,7 @@ const Loading = () => {
 const Scene = () => {
   return (
     <>
-      <OrbitControls enableZoom={true} enablePan={true} />
+      <OrbitControls enableZoom={false} enablePan={false} />
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
       <Figure />
