@@ -107,13 +107,9 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
 
           <ul onClick={() => toggleMobileNavbar(!mobileNavbar)}>
             <div className={OVERLAY_CLASS}>
-              <MobileNavLink href={MOBILE_ROUTES.HOME}>About</MobileNavLink>
+              <MobileNavLink href={"/playground"}>Playground</MobileNavLink>
 
-              <MobileNavLink href={MOBILE_ROUTES.SEARCH}>Search</MobileNavLink>
-
-              <MobileNavLink href={MOBILE_ROUTES.DISCOVER}>
-                Discover
-              </MobileNavLink>
+              <MobileNavLink href={"/canvas"}>Canvas</MobileNavLink>
 
               {!user && (
                 <button onClick={() => console.log("sign in")}></button>
