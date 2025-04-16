@@ -1,4 +1,3 @@
-
 "use client";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Text } from "@react-three/drei";
@@ -22,7 +21,7 @@ const Scene = () => {
 
 export const CustomCanvas = () => {
   return (
-    <div className="w-[60vh] h-screen">
+    <div className="h-3/4 w-[60vh] md:h-screen">
       <Canvas camera={{ position: [0, 0, 50] }}>
         <Suspense fallback={<Loading />}>
           <Scene />
@@ -31,4 +30,3 @@ export const CustomCanvas = () => {
     </div>
   );
 };
-

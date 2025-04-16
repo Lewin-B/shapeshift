@@ -39,7 +39,7 @@ export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
   });
 
   return (
-    <div className="w-full h-[65vh] ">
+    <div className="h-[30vh] w-full md:h-[65vh] md:w-full">
       <SandpackProvider
         files={{
           "/App.js": appFile,
@@ -56,10 +56,18 @@ export default function ReactPlayground({ settings }: ReactPlaygroundProps) {
           },
         }}
       >
-        <SandpackLayout>
-          <SandpackCodeEditor style={{ height: "65vh" }} />
-          <SandpackPreview style={{ height: "65vh" }} />
-        </SandpackLayout>
+        <div className="hidden md:block">
+          <SandpackLayout>
+            <SandpackCodeEditor style={{ height: "65vh" }} />
+            <SandpackPreview style={{ height: "65vh" }} />
+          </SandpackLayout>
+        </div>
+
+        <div className="block md:hidden">
+          <SandpackLayout>
+            <SandpackPreview style={{ height: "30vh" }} />
+          </SandpackLayout>
+        </div>
       </SandpackProvider>
     </div>
   );

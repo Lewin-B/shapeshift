@@ -17,7 +17,19 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <div className="flex min-h-screen w-full flex-col items-center justify-center bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_35%,_#030303_70%,_#242015_93%)] px-4 py-8 md:flex-row md:items-center md:justify-start md:space-x-16 md:pl-10 lg:space-x-64 lg:pl-30">
+      <div className="mt-12 flex min-h-screen w-full flex-col items-center justify-center bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_35%,_#030303_70%,_#242015_93%)] px-4 py-8 md:flex-row md:items-center md:justify-start md:space-x-16 md:pl-10 lg:space-x-64 lg:pl-30">
+        <div className="block h-1/2 md:ml-[-175] md:hidden">
+          <CustomCanvas />
+          {/*
+          <Image
+            src="/logo.svg"
+            width={216}
+            height={376}
+            alt="shapeshift logo"
+            className="w-36 sm:w-40 md:w-48 lg:w-[216px]"
+          />
+          */}
+        </div>
         <div className="flex flex-col items-center justify-center space-y-6 text-center md:w-1/2 md:items-start md:text-left">
           <FadeinText
             text={"Take your creation to the next dimension."}
@@ -40,7 +52,7 @@ export default function Home() {
             />
           </Link>
         </div>
-        <div className="ml-[-175]">
+        <div className="hidden md:ml-[-175] md:block">
           <CustomCanvas />
           {/*
           <Image
@@ -61,7 +73,7 @@ export default function Home() {
         </h2>
         <div className="flex flex-col items-center justify-center gap-8 md:flex-row md:gap-10 lg:gap-20">
           <Block step={1} instructions="Import your SVG">
-            <div className="flex h-48 w-48 items-center justify-center sm:h-52 sm:w-52 md:h-56 md:w-56 lg:h-60 lg:w-60">
+            <div className="flex items-center justify-center sm:h-52 sm:w-52 md:h-56 md:w-56 lg:h-60 lg:w-60">
               <Upload className="text-white-400 h-20 w-20" />
             </div>
           </Block>
@@ -82,7 +94,7 @@ export default function Home() {
       </div>
 
       {/* Demo Section */}
-      <div className="flex min-h-screen w-full flex-col items-center bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_45%,_#030303_80%,_#242015_95%)] px-4 py-10">
+      <div className="flex min-h-screen w-full flex-col items-center justify-evenly bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_45%,_#030303_80%,_#242015_95%)] px-4 py-10">
         <h1 className="font-['Instrument Sans'] max-w-xs text-center text-2xl leading-tight font-bold text-white sm:max-w-md sm:text-3xl md:max-w-lg md:text-4xl lg:max-w-2xl">
           Choose to import any svg, OR make your very own models in our Canvas
           workspace!

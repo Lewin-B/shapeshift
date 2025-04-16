@@ -13,6 +13,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 import { AppSidebar } from "~/components/app-sidebar";
+import { MobileControlMenu } from "~/components/mobile-menu";
 import { useState } from "react";
 
 export default function Page() {
@@ -49,18 +50,18 @@ export default function Page() {
 
   return (
     <Suspense>
-      <div className="flex h-screen justify-center overflow-hidden bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_35%,_#030303_64%,_#242015_86%)] pt-20">
+      <div className="flex h-screen flex-col justify-center overflow-hidden bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_35%,_#030303_64%,_#242015_86%)] pt-20 md:flex-row">
         <SidebarProvider>
-          <div className="w-80 justify-self-center">
+          <div className="hidden w-80 justify-self-center md:block">
             <AppSidebar settings={settings} />
           </div>
-          <Tabs defaultValue="React" className="mr-10 ml-10 flex w-290">
+          <Tabs defaultValue="React" className="flex md:mx-10 md:w-290">
             <TabsList className="flex w-full justify-center bg-[#262013] text-[#FFFFFF]">
               <TabsTrigger className="text-[#F3B518]" value="React">
                 React
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="React">
+            <TabsContent value="React" className="w-screen md:w-auto">
               <Card className="shadow-[inset_0px_4px_22.600000381469727px_12px_rgba(0,0,0,0.49)]">
                 <CardHeader className="text-[#F3B518]">
                   <CardTitle>Playground</CardTitle>
@@ -74,6 +75,9 @@ export default function Page() {
               </Card>
             </TabsContent>
           </Tabs>
+          <div className="block w-80 justify-self-center md:hidden">
+            <MobileControlMenu settings={settings} />
+          </div>
         </SidebarProvider>
       </div>
     </Suspense>
