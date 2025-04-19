@@ -17,6 +17,8 @@ export const env = createEnv({
     GCP_BUCKET_NAME: z.string(),
     DATABASE_URL: z.string().url(),
     GEMINI_KEY: z.string(),
+    GITHUB_ID: z.string(),
+    GITHUB_SECRET: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -41,6 +43,8 @@ export const env = createEnv({
     GCP_CLIENT_EMAIL: process.env.GCP_CLIENT_EMAIL,
     GCP_PRIVATE_KEY: process.env.GCP_PRIVATE_KEY,
     GCP_BUCKET_NAME: process.env.GCP_BUCKET_NAME,
+    GITHUB_ID: process.env.GITHUB_ID,
+    GITHUB_SECRET: process.env.GITHUB_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
     GEMINI_KEY: process.env.GEMINI_KEY,
     NODE_ENV: process.env.NODE_ENV,
