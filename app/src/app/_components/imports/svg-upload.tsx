@@ -13,7 +13,7 @@ export default function SvgCard() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const uploadMutation = api.post.uploadSVG.useMutation();
+  const uploadMutation = api.svg.uploadSVG.useMutation();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -81,13 +81,13 @@ export default function SvgCard() {
   // If loading, display the loading screen
   if (isLoading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
-        <div className="bg-[#262013] p-8 rounded-xl shadow-lg text-center">
-          <Loader2 className="h-12 w-12 text-[#F3B518] animate-spin mx-auto mb-4" />
-          <p className="text-white text-xl font-['Instrument Sans']">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+        <div className="rounded-xl bg-[#262013] p-8 text-center shadow-lg">
+          <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-[#F3B518]" />
+          <p className="font-['Instrument Sans'] text-xl text-white">
             Transforming your SVG...
           </p>
-          <p className="text-[#F3B518] mt-2">{uploadStatus}</p>
+          <p className="mt-2 text-[#F3B518]">{uploadStatus}</p>
         </div>
       </div>
     );
@@ -96,7 +96,7 @@ export default function SvgCard() {
   return (
     <Card
       onClick={() => console.log("click")}
-      className="flex h-auto w-auto justify-center bg-black/5 rounded-[50px] shadow-[inset_0px_4px_41.099998474121094px_3px_rgba(253,250,250,0.50)]"
+      className="flex h-auto w-auto justify-center rounded-[50px] bg-black/5 shadow-[inset_0px_4px_41.099998474121094px_3px_rgba(253,250,250,0.50)]"
     >
       <CardContent className="flex flex-col items-center justify-center space-y-4">
         <form onSubmit={handleSubmit} className="grid gap-4">

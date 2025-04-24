@@ -24,7 +24,7 @@ const model = genAI.getGenerativeModel({
   model: "gemini-2.0-flash-exp-image-generation",
 });
 
-export const postRouter = createTRPCRouter({
+export const svgRouter = createTRPCRouter({
   uploadSVG: publicProcedure
     .input(
       z.object({

@@ -13,7 +13,7 @@ export default function SvgGeneratorCard() {
   const [fileUrl, setFileUrl] = useState<string>("");
   const router = useRouter();
 
-  const generateMutation = api.post.generateSvg.useMutation();
+  const generateMutation = api.svg.generateSvg.useMutation();
 
   const handleSubmit = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
