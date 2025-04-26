@@ -1,5 +1,6 @@
 import SvgCard from "../_components/imports/svg-upload";
 import SvgGeneratorCard from "../_components/imports/generate-svg";
+import LoadSVG from "../_components/imports/load-svg";
 
 export default function Menu() {
   return (
@@ -10,6 +11,7 @@ export default function Menu() {
       <div className="flex flex-col space-y-7 md:flex-row md:justify-center md:space-y-0 md:space-x-7">
         <SvgCard />
         <SvgGeneratorCard />
+        <LoadSVG />
       </div>
     </div>
   );

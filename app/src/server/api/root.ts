@@ -1,5 +1,6 @@
 import { svgRouter } from "~/server/api/routers/svg";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+import { playgroundRouter } from "./routers/playground";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   svg: svgRouter,
+  playground: playgroundRouter,
 });
 
 // export type definition of API

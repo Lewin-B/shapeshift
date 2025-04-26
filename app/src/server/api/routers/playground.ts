@@ -8,48 +8,60 @@ export const playgroundRouter = createTRPCRouter({
   savePlayground: publicProcedure
     .input(
       z.object({
-        playgroundId: z.number(),
+        playgroundId: z.number().optional(),
+        name: z.string().min(1, "Code can not be empty"),
         figureCode: z.string().min(1, "Code can not be empty"),
         canvasCode: z.string().min(1, "Code can not be empty"),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      if (!ctx.session?.user) {
+      const userId = ctx.session?.user?.id;
+      if (!userId) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "User does not exist",
         });
       }
 
-      const resultStatus = await db.playground.update({
-        where: {
-          id: input.playgroundId,
-          createdById: ctx.session.user.id
-        },
-        data: {
-          canvas: input.canvasCode,
-          figure: input.figureCode
-        }
-      })
+      const data = {
+        name: input.name,
+        figure: input.figureCode,
+        canvas: input.canvasCode,
+      };
 
-      return { data: resultStatus }
+      if (input.playgroundId) {
+        const updated = await db.playground.update({
+          where: {
+            id: input.playgroundId,
+            createdById: userId,
+          },
+          data,
+        });
+        return updated;
+      } else {
+        const created = await db.playground.create({
+          data: {
+            ...data,
+            createdById: userId,
+          },
+        });
+        return created;
+      }
     }),
-  fetchPlaygrounds: publicProcedure
-    .query(async ({ ctx }) => {
+  fetchPlaygrounds: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.session?.user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "User does not exist",
+      });
+    }
 
-      if (!ctx.session?.user) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "User does not exist",
-        });
-      }
+    const results = db.playground.findMany({
+      where: {
+        createdById: ctx.session.user.id,
+      },
+    });
 
-      const results = db.playground.findMany({
-        where: {
-          createdById: ctx.session.user.id
-        },
-      })
-
-      return { data: results }
-    })
+    return results;
+  }),
 });

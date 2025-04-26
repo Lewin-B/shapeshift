@@ -127,10 +127,10 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
         {user && (
           <>
             <Link
-              href="/edit"
+              href="/profile"
               className="relative flex h-full items-center justify-center rounded-lg px-8 py-2 font-normal text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10"
             >
-              Edit Profile
+              Profile
               <span className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-300 ease-in-out hover:w-full"></span>
             </Link>
 

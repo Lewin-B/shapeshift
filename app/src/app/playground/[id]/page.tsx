@@ -1,5 +1,5 @@
 "use client";
-import ReactPlayground from "../_components/playground/react-playground";
+import ReactPlayground from "../../_components/playground/react-playground";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   Card,
@@ -28,7 +28,7 @@ import { Label } from "~/components/ui/label";
 import { AppSidebar } from "~/components/app-sidebar";
 import { MobileControlMenu } from "~/components/mobile-menu";
 import { useState, useRef } from "react";
-import type { ReactPlaygroundHandle } from "../_components/playground/react-playground";
+import type { ReactPlaygroundHandle } from "../../_components/playground/react-playground";
 
 export default function Page() {
   const searchParams = useSearchParams();

@@ -15,11 +15,12 @@ datasource db {
 }
 
 model Playground {
-    id          Int      @id @default(autoincrement())
+    id          String   @id @default(cuid())
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
     createdBy   User     @relation(fields: [createdById], references: [id])
     createdById String
+    name        String
     canvas      String
     figure      String
 }
@@ -53,9 +54,9 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String       @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?      @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
