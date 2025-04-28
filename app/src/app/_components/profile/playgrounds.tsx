@@ -32,8 +32,7 @@ export function PlaygroundMenu({
   // Format date to relative time (e.g., "2 hours ago")
   const formatRelativeTime = (dateString: Date) => {
     const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now - date) / 1000);
+    const diffInSeconds = Math.floor((Date.now() - date.getTime()) / 1000);
 
     if (diffInSeconds < 60) return "Just now";
     if (diffInSeconds < 3600)
