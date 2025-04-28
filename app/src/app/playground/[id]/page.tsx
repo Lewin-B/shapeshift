@@ -49,6 +49,10 @@ export default function Page() {
     id: params.id,
   });
 
+  useEffect(() => {
+    setPlaygroundName(playground?.name ?? "hello");
+  }, [playground]);
+
   const [playgroundName, setPlaygroundName] = useState(playground?.name ?? "");
 
   const settings = useMemo(
