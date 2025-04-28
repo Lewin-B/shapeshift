@@ -24,11 +24,13 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { redirect } from "next/navigation";
 
 import { AppSidebar } from "~/components/app-sidebar";
 import { MobileControlMenu } from "~/components/mobile-menu";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import type { ReactPlaygroundHandle } from "../_components/playground/react-playground";
+import { buildFigureFile } from "../_components/playground/files";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -46,34 +48,56 @@ export default function Page() {
 
   const playgroundRef = useRef<ReactPlaygroundHandle>(null);
 
-  const settings = {
-    depth,
-    setDepth,
-    size,
-    setSize,
-    svgUrl: fileUrl ?? "",
-    rotateX,
-    setRotationX,
-    rotateY,
-    setRotationY,
-    rotateZ,
-    setRotationZ,
-    bounceX,
-    setBounceX,
-    bounceY,
-    setBounceY,
-    bounceZ,
-    setBounceZ,
-  };
+  const settings = useMemo(
+    () => ({
+      depth,
+      setDepth,
+      size,
+      setSize,
+      svgUrl: fileUrl ?? "",
+      rotateX,
+      setRotationX,
+      rotateY,
+      setRotationY,
+      rotateZ,
+      setRotationZ,
+      bounceX,
+      setBounceX,
+      bounceY,
+      setBounceY,
+      bounceZ,
+      setBounceZ,
+    }),
+    [
+      depth,
+      size,
+      rotateX,
+      rotateY,
+      rotateZ,
+      bounceX,
+      bounceY,
+      bounceZ,
+      fileUrl,
+    ],
+  );
+
+  useEffect(() => {
+    playgroundRef.current?.updateSettings(settings);
+  }, [settings]);
 
   const handleSave = () => {
     if (!playgroundRef.current) return;
-    const allFiles = playgroundRef.current.handleSave(playgroundName);
-    // now you can POST `allFiles` to your server, download them, etc.
-    console.log("Saved files:", allFiles);
-    setDialogOpen(false);
-    setPlaygroundName(""); // Reset the name field after saving
+    playgroundRef.current.handleSave(playgroundName);
+
+    redirect("/profile");
   };
+
+  const figure = buildFigureFile(settings);
+
+  const playgroundElement = useMemo(
+    () => <ReactPlayground ref={playgroundRef} figure={figure} />,
+    [figure],
+  );
 
   return (
     <Suspense>
@@ -137,7 +161,7 @@ export default function Page() {
                   </Dialog>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <ReactPlayground ref={playgroundRef} settings={settings} />
+                  {playgroundElement}
                 </CardContent>
               </Card>
             </TabsContent>

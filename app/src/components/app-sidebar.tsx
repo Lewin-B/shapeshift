@@ -88,11 +88,11 @@ export function AppSidebar({ settings }: AppSidebarProps) {
         <h1 className="text-xl text-[#FFFFFF]">Control Panel</h1>
       </SidebarHeader>
       <SidebarContent className="w-full space-y-6 bg-linear-to-r from-[#262013] to-[#030303] p-4">
-        <Card className="border-[#F3B518] transition-all hover:shadow-md">
+        <Card className="border-[#F3B518] bg-[#030303] transition-all hover:shadow-md">
           <CardHeader className="pb-2">
             <h2 className="flex items-center justify-center space-x-3 text-lg font-medium">
-              <Scale3D className="text-[#FFD874]" size={20} />
-              <span className="text-[#FFD874]">Appearance</span>
+              <Scale3D className="text-[#F3B518]" size={20} />
+              <span className="text-[#F3B518]">Appearance</span>
             </h2>
           </CardHeader>
           <CardContent className="space-y-6 text-[#F3B518]">

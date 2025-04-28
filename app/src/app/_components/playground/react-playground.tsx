@@ -21,94 +21,104 @@ import { toast } from "sonner";
 
 // shape of the handle
 export type ReactPlaygroundHandle = {
-  handleSave: (playgroundName: string) => void;
+  handleSave: (playgroundName: string, id?: string) => void;
+  updateSettings: (settings: SettingsProps) => void;
 };
 
-type ReactPlaygroundProps = {
-  settings: SettingsProps;
+type EditorProps = {
+  svgUrl: string;
 };
 
-const Editor = forwardRef<ReactPlaygroundHandle>((_, ref) => {
-  const { sandpack } = useSandpack();
-  const createPlayground = api.playground.savePlayground.useMutation({
-    onSuccess: () => {
-      toast.success("Succesfully Saved Playground");
-    },
-    onError: () => {
-      toast.error("Error Saving Playground");
-    },
-  });
+const Editor = forwardRef<ReactPlaygroundHandle, EditorProps>(
+  ({ svgUrl }, ref) => {
+    const { sandpack } = useSandpack();
+    const { updateFile } = sandpack;
 
-  // expose handleSave
-  useImperativeHandle(ref, () => ({
-    handleSave: (playgroundName) => {
-      console.log("Please: ", sandpack.files);
-      const figureCode = sandpack.files["/figure.tsx"]?.code;
-      const canvasCode = sandpack.files["/canvas.tsx"]?.code;
+    const createPlayground = api.playground.savePlayground.useMutation({
+      onSuccess: () => toast.success("Successfully Saved Playground"),
+      onError: () => toast.error("Error Saving Playground"),
+    });
 
-      createPlayground.mutate({
-        name: playgroundName,
-        figureCode: figureCode ?? "",
-        canvasCode: canvasCode ?? "",
-      });
-    },
-  }));
+    // expose save handler
+    useImperativeHandle(ref, () => ({
+      handleSave: (playgroundName, id) => {
+        const figureCode = sandpack.files["/figure.tsx"]?.code;
+        const canvasCode = sandpack.files["/canvas.tsx"]?.code;
 
-  // mobile detection
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
-  useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+        createPlayground.mutate({
+          playgroundId: id ?? undefined,
+          name: playgroundName,
+          figureCode: figureCode ?? "",
+          canvasCode: canvasCode ?? "",
+        });
+      },
+      updateSettings: (settings) => {
+        const {
+          depth,
+          size,
+          rotateX,
+          rotateY,
+          rotateZ,
+          bounceX,
+          bounceY,
+          bounceZ,
+        } = settings;
 
-  useEffect(() => {
-    console.log("Current files:", sandpack.files);
-  }, [sandpack.files]);
+        const newCode = buildFigureFile({
+          depth,
+          size,
+          svgUrl,
+          rotateX,
+          rotateY,
+          rotateZ,
+          bounceX,
+          bounceY,
+          bounceZ,
+        });
+        updateFile("/figure.tsx", newCode);
+      },
+    }));
 
-  return (
-    <Fragment>
-      <SandpackLayout>
-        {!isMobile && <SandpackCodeEditor style={{ height: "65vh" }} />}
-        <SandpackPreview style={{ height: isMobile ? "30vh" : "65vh" }} />
-      </SandpackLayout>
-    </Fragment>
-  );
-});
+    // mobile detection
+    const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+    useEffect(() => {
+      const onResize = () => setIsMobile(window.innerWidth < 768);
+      window.addEventListener("resize", onResize);
+      return () => window.removeEventListener("resize", onResize);
+    }, []);
+
+    return (
+      <Fragment>
+        <SandpackLayout>
+          {!isMobile && <SandpackCodeEditor style={{ height: "65vh" }} />}
+          <SandpackPreview style={{ height: isMobile ? "30vh" : "65vh" }} />
+        </SandpackLayout>
+      </Fragment>
+    );
+  },
+);
 Editor.displayName = "Editor";
 
-// ─── WRAPPER ────────────────────────────────────────────────────────────
-const ReactPlayground = forwardRef<ReactPlaygroundHandle, ReactPlaygroundProps>(
-  ({ settings }, ref) => {
-    const {
-      depth,
-      size,
-      svgUrl,
-      rotateX,
-      rotateY,
-      rotateZ,
-      bounceX,
-      bounceY,
-      bounceZ,
-    } = settings;
+type ReactPlaygroundProps = {
+  id?: string;
+  figure: string;
+};
 
-    const figureFile = buildFigureFile({
-      depth,
-      size,
-      svgUrl,
-      rotateX,
-      rotateY,
-      rotateZ,
-      bounceX,
-      bounceY,
-      bounceZ,
-    });
+const ReactPlayground = forwardRef<ReactPlaygroundHandle, ReactPlaygroundProps>(
+  ({ figure }, ref) => {
+    const urlRegex = /(https:\/\/storage\.googleapis\.com\/[^"']+\.svg)/;
+    const match = urlRegex.exec(figure);
+
+    let svgUrl = "";
+    if (match) {
+      svgUrl = match[1] ?? "";
+    }
 
     return (
       <SandpackProvider
         files={{
           "/App.js": appFile,
-          "/figure.tsx": figureFile,
+          "/figure.tsx": figure,
           "/canvas.tsx": canvasFile,
           "/App.css": appCssFile,
         }}
@@ -121,7 +131,7 @@ const ReactPlayground = forwardRef<ReactPlaygroundHandle, ReactPlaygroundProps>(
           },
         }}
       >
-        <Editor ref={ref} />
+        <Editor ref={ref} svgUrl={svgUrl} />
       </SandpackProvider>
     );
   },

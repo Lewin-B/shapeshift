@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { SidebarProvider } from "~/components/ui/sidebar";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Suspense } from "react";
 import { Button } from "~/components/ui/button";
 import { Save } from "lucide-react";
@@ -27,12 +27,12 @@ import { Label } from "~/components/ui/label";
 
 import { AppSidebar } from "~/components/app-sidebar";
 import { MobileControlMenu } from "~/components/mobile-menu";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import type { ReactPlaygroundHandle } from "../../_components/playground/react-playground";
+import { api } from "~/trpc/react";
 
 export default function Page() {
-  const searchParams = useSearchParams();
-  const fileUrl = searchParams.get("fileUrl");
+  const params = useParams<{ id: string }>();
   const [depth, setDepth] = useState<number>(0);
   const [size, setSize] = useState<number>(0);
   const [rotateX, setRotationX] = useState<string>("");
@@ -42,37 +42,56 @@ export default function Page() {
   const [bounceY, setBounceY] = useState<string>("");
   const [bounceZ, setBounceZ] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [playgroundName, setPlaygroundName] = useState("");
 
   const playgroundRef = useRef<ReactPlaygroundHandle>(null);
 
-  const settings = {
-    depth,
-    setDepth,
-    size,
-    setSize,
-    svgUrl: fileUrl ?? "",
-    rotateX,
-    setRotationX,
-    rotateY,
-    setRotationY,
-    rotateZ,
-    setRotationZ,
-    bounceX,
-    setBounceX,
-    bounceY,
-    setBounceY,
-    bounceZ,
-    setBounceZ,
-  };
+  const { data: playground } = api.playground.fetchPlayground.useQuery({
+    id: params.id,
+  });
+
+  console.log("Playground: ", playground);
+
+  const [playgroundName, setPlaygroundName] = useState(playground?.name ?? "");
+
+  const settings = useMemo(
+    () => ({
+      depth,
+      setDepth,
+      size,
+      setSize,
+      svgUrl: "",
+      rotateX,
+      setRotationX,
+      rotateY,
+      setRotationY,
+      rotateZ,
+      setRotationZ,
+      bounceX,
+      setBounceX,
+      bounceY,
+      setBounceY,
+      bounceZ,
+      setBounceZ,
+    }),
+    [depth, size, rotateX, rotateY, rotateZ, bounceX, bounceY, bounceZ],
+  );
+
+  useEffect(() => {
+    playgroundRef.current?.updateSettings(settings);
+  }, [settings]);
+
+  const playgroundElement = useMemo(
+    () => (
+      <ReactPlayground ref={playgroundRef} figure={playground?.figure ?? ""} />
+    ),
+    [playground?.figure],
+  );
 
   const handleSave = () => {
     if (!playgroundRef.current) return;
-    const allFiles = playgroundRef.current.handleSave(playgroundName);
-    // now you can POST `allFiles` to your server, download them, etc.
-    console.log("Saved files:", allFiles);
+    playgroundRef.current.handleSave(playgroundName, params.id);
+
     setDialogOpen(false);
-    setPlaygroundName(""); // Reset the name field after saving
   };
 
   return (
@@ -120,7 +139,7 @@ export default function Page() {
                             value={playgroundName}
                             onChange={(e) => setPlaygroundName(e.target.value)}
                             className="col-span-3"
-                            placeholder="My Awesome Playground"
+                            placeholder={playgroundName}
                           />
                         </div>
                       </div>
@@ -137,7 +156,7 @@ export default function Page() {
                   </Dialog>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <ReactPlayground ref={playgroundRef} settings={settings} />
+                  {playgroundElement}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -168,7 +187,7 @@ export default function Page() {
                         value={playgroundName}
                         onChange={(e) => setPlaygroundName(e.target.value)}
                         className="col-span-3"
-                        placeholder="My Awesome Playground"
+                        placeholder={playgroundName}
                       />
                     </div>
                   </div>

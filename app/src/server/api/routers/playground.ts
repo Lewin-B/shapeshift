@@ -8,7 +8,7 @@ export const playgroundRouter = createTRPCRouter({
   savePlayground: publicProcedure
     .input(
       z.object({
-        playgroundId: z.number().optional(),
+        playgroundId: z.string().optional(),
         name: z.string().min(1, "Code can not be empty"),
         figureCode: z.string().min(1, "Code can not be empty"),
         canvasCode: z.string().min(1, "Code can not be empty"),
@@ -64,4 +64,31 @@ export const playgroundRouter = createTRPCRouter({
 
     return results;
   }),
+  fetchPlayground: publicProcedure
+    .input(
+      z.object({
+        id: z.string().min(1, "id required"),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!ctx.session?.user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User does not exist",
+        });
+      }
+      try {
+        return await db.playground.findUnique({
+          where: {
+            id: input.id,
+            createdById: ctx.session?.user.id,
+          },
+        });
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: (error as TRPCError).message,
+        });
+      }
+    }),
 });
