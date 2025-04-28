@@ -139,7 +139,7 @@ export const buildFigureFile = ({
   bounceZ: string;
 }) => {
   const figureFile = `
-  "use client";
+"use client";
 import React, { useRef, useMemo, useState } from "react";
 import { useLoader } from "@react-three/fiber";
 import * as THREE from "three";
