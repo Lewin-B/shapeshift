@@ -49,8 +49,6 @@ export default function Page() {
     id: params.id,
   });
 
-  console.log("Playground: ", playground);
-
   const [playgroundName, setPlaygroundName] = useState(playground?.name ?? "");
 
   const settings = useMemo(
