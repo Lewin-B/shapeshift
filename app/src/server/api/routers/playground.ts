@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { db } from "~/server/db";
 
@@ -67,7 +71,7 @@ export const playgroundRouter = createTRPCRouter({
         });
       }
     }),
-  fetchPlaygrounds: publicProcedure.query(async ({ ctx }) => {
+  fetchPlaygrounds: protectedProcedure.query(async ({ ctx }) => {
     if (!ctx.session?.user) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
@@ -83,7 +87,7 @@ export const playgroundRouter = createTRPCRouter({
 
     return results;
   }),
-  fetchPlayground: publicProcedure
+  fetchPlayground: protectedProcedure
     .input(
       z.object({
         id: z.string().min(1, "id required"),
@@ -110,7 +114,7 @@ export const playgroundRouter = createTRPCRouter({
         });
       }
     }),
-  deletePlayground: publicProcedure
+  deletePlayground: protectedProcedure
     .input(
       z.object({
         id: z.string().min(1, "Playground ID is required"),

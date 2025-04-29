@@ -35,6 +35,10 @@ export const authConfig = {
     GitHubProvider({
       clientId: env.GITHUB_ID,
       clientSecret: env.GITHUB_SECRET,
+      authorization: {
+        url: "https://github.com/login/oauth/authorize",
+        params: { scope: "read:user user:email" },
+      },
     }),
   ],
   adapter: PrismaAdapter(db),
