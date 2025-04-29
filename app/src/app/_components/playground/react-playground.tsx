@@ -21,7 +21,11 @@ import { toast } from "sonner";
 
 // shape of the handle
 export type ReactPlaygroundHandle = {
-  handleSave: (playgroundName: string, id?: string) => void;
+  handleSave: (
+    playgroundName: string,
+    settings: SettingsProps,
+    id?: string,
+  ) => void;
   updateSettings: (settings: SettingsProps) => void;
 };
 
@@ -41,15 +45,34 @@ const Editor = forwardRef<ReactPlaygroundHandle, EditorProps>(
 
     // expose save handler
     useImperativeHandle(ref, () => ({
-      handleSave: (playgroundName, id) => {
+      handleSave: (playgroundName, settings, id) => {
         const figureCode = sandpack.files["/figure.tsx"]?.code;
         const canvasCode = sandpack.files["/canvas.tsx"]?.code;
 
+        const {
+          depth,
+          size,
+          rotateX,
+          rotateY,
+          rotateZ,
+          bounceX,
+          bounceY,
+          bounceZ,
+        } = settings;
+
         createPlayground.mutate({
-          playgroundId: id ?? undefined,
+          playgroundId: id,
           name: playgroundName,
           figureCode: figureCode ?? "",
           canvasCode: canvasCode ?? "",
+          depth,
+          size,
+          rotateX,
+          rotateY,
+          rotateZ,
+          bounceX,
+          bounceY,
+          bounceZ,
         });
       },
       updateSettings: (settings) => {

@@ -45,9 +45,24 @@ export default function Page() {
 
   const playgroundRef = useRef<ReactPlaygroundHandle>(null);
 
-  const { data: playground } = api.playground.fetchPlayground.useQuery({
-    id: params.id,
-  });
+  const {
+    data: playground,
+    isLoading,
+    isError,
+  } = api.playground.fetchPlayground.useQuery({ id: params.id });
+
+  // whenever `playground` changes (i.e. the query returns), sync it into state
+  useEffect(() => {
+    if (!playground) return;
+    setDepth(playground.depth);
+    setSize(playground.size);
+    setRotationX(playground.rotateX);
+    setRotationY(playground.rotateY);
+    setRotationZ(playground.rotateZ);
+    setBounceX(playground.bounceX);
+    setBounceY(playground.bounceY);
+    setBounceZ(playground.bounceZ);
+  }, [playground]);
 
   useEffect(() => {
     setPlaygroundName(playground?.name ?? "hello");
@@ -91,10 +106,18 @@ export default function Page() {
 
   const handleSave = () => {
     if (!playgroundRef.current) return;
-    playgroundRef.current.handleSave(playgroundName, params.id);
+    playgroundRef.current.handleSave(playgroundName, settings, params.id);
 
     setDialogOpen(false);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>error</div>;
+  }
 
   return (
     <Suspense>

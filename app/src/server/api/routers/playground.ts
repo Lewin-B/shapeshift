@@ -9,9 +9,18 @@ export const playgroundRouter = createTRPCRouter({
     .input(
       z.object({
         playgroundId: z.string().optional(),
-        name: z.string().min(1, "Code can not be empty"),
-        figureCode: z.string().min(1, "Code can not be empty"),
-        canvasCode: z.string().min(1, "Code can not be empty"),
+        name: z.string().min(1, "Name can not be empty"),
+        figureCode: z.string().min(1, "Figure code can not be empty"),
+        canvasCode: z.string().min(1, "Canvas code can not be empty"),
+        // --- add validations for your new settings ---
+        depth: z.number(),
+        size: z.number(),
+        rotateX: z.string(),
+        rotateY: z.string(),
+        rotateZ: z.string(),
+        bounceX: z.string(),
+        bounceY: z.string(),
+        bounceZ: z.string(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -23,29 +32,39 @@ export const playgroundRouter = createTRPCRouter({
         });
       }
 
+      // build the common data payload
       const data = {
         name: input.name,
         figure: input.figureCode,
         canvas: input.canvasCode,
+        // --- include your new settings ---
+        depth: input.depth,
+        size: input.size,
+        rotateX: input.rotateX,
+        rotateY: input.rotateY,
+        rotateZ: input.rotateZ,
+        bounceX: input.bounceX,
+        bounceY: input.bounceY,
+        bounceZ: input.bounceZ,
       };
 
       if (input.playgroundId) {
-        const updated = await db.playground.update({
+        // update existing record
+        return await db.playground.update({
           where: {
             id: input.playgroundId,
             createdById: userId,
           },
           data,
         });
-        return updated;
       } else {
-        const created = await db.playground.create({
+        // create new record
+        return await db.playground.create({
           data: {
             ...data,
             createdById: userId,
           },
         });
-        return created;
       }
     }),
   fetchPlaygrounds: publicProcedure.query(async ({ ctx }) => {

@@ -87,7 +87,7 @@ export default function Page() {
 
   const handleSave = () => {
     if (!playgroundRef.current) return;
-    playgroundRef.current.handleSave(playgroundName);
+    playgroundRef.current.handleSave(playgroundName, settings);
 
     redirect("/profile");
   };
