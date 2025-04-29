@@ -1,7 +1,7 @@
 "use client";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Card, CardContent } from "~/components/ui/card";
-import { Upload, ExternalLink, Loader2 } from "lucide-react";
+import { Upload, ExternalLink, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
@@ -11,13 +11,37 @@ export default function SvgCard() {
   const [uploadStatus, setUploadStatus] = useState<string>("");
   const [fileUrl, setFileUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const router = useRouter();
 
   const uploadMutation = api.svg.uploadSVG.useMutation();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setError("");
+
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0] ?? null);
+      const selectedFile = e.target.files[0];
+
+      if (!selectedFile) {
+        setError("Error uplaoding file");
+        return;
+      }
+
+      // Check if the file is an SVG
+      if (selectedFile.type !== "image/svg+xml") {
+        setError("Only SVG files are allowed");
+        setFile(null);
+        return;
+      }
+
+      // Additional validation: check file extension as well
+      if (!selectedFile.name.toLowerCase().endsWith(".svg")) {
+        setError("Only files with .svg extension are allowed");
+        setFile(null);
+        return;
+      }
+
+      setFile(selectedFile);
     }
   };
 
@@ -48,11 +72,8 @@ export default function SvgCard() {
               fileSize: file.size,
             });
 
-            console.log("file: ", file);
-
             // Store the fileUrl in a variable
             const uploadedFileUrl = result.fileUrl;
-            console.log("Uploaded file URL:", uploadedFileUrl);
 
             // Update state with the file URL
             setFileUrl(uploadedFileUrl);
@@ -110,16 +131,28 @@ export default function SvgCard() {
                 <div className="font-['Instrument Sans'] text-[25px] leading-[30px] font-normal text-white not-italic">
                   Import <span className="text-[#F3B518]">SVG</span>
                 </div>
+                <p className="text-sm text-white/70">
+                  Only SVG files are allowed
+                </p>
               </div>
               <input
                 id="dropzone-file"
                 type="file"
                 className="hidden"
                 onChange={handleFileChange}
+                accept=".svg,image/svg+xml"
               />
             </label>
           </div>
-          {file && (
+
+          {error && (
+            <div className="flex items-center gap-2 rounded-md bg-red-500/20 p-2 text-red-400">
+              <AlertCircle className="h-4 w-4" />
+              <p className="text-sm">{error}</p>
+            </div>
+          )}
+
+          {file && !error && (
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">{file.name}</p>

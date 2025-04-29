@@ -36,7 +36,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const fileUrl = searchParams.get("fileUrl");
   const [depth, setDepth] = useState<number>(0);
-  const [size, setSize] = useState<number>(0);
+  const [size, setSize] = useState<number>(25);
   const [rotateX, setRotationX] = useState<string>("");
   const [rotateY, setRotationY] = useState<string>("");
   const [rotateZ, setRotationZ] = useState<string>("");
