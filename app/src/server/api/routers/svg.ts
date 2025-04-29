@@ -34,26 +34,12 @@ export const svgRouter = createTRPCRouter({
         fileSize: z.number().optional(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       let attempt = 0;
       let lastError;
 
       while (attempt < 10) {
         try {
-          console.log("hello");
-
-          // Set CORS configuration (this is run every time, consider moving outside loop if needed)
-          // void bucket.setCorsConfiguration([
-          //   {
-          //     origin: ["*"],
-          //     method: ["GET", "HEAD", "PUT", "POST", "DELETE"],
-          //     responseHeader: ["Content-Type", "x-goog-meta-*"],
-          //     maxAgeSeconds: 3600,
-          //   },
-          // ]);
-
-          console.log("hello 1");
-
           // Decode base64 data
           const fileBuffer = Buffer.from(input.fileData, "base64");
 
