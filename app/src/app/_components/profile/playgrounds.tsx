@@ -17,19 +17,63 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/components/ui/alert-dialog";
 import Link from "next/link";
 import type { Playground } from "@prisma/client";
+import { api } from "~/trpc/react";
+import { toast } from "sonner";
 
 export function PlaygroundMenu({
-  playgrounds,
+  playgrounds: initialPlaygrounds,
   userName,
 }: {
   playgrounds: Playground[];
   userName: string;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [playgrounds, setPlaygrounds] = useState(initialPlaygrounds);
 
-  // Format date to relative time (e.g., "2 hours ago")
+  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+  const [currentPlayground, setCurrentPlayground] = useState<Playground | null>(
+    null,
+  );
+  const [newName, setNewName] = useState("");
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [playgroundToDelete, setPlaygroundToDelete] =
+    useState<Playground | null>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const renameMutation = api.playground.savePlayground.useMutation({
+    onSuccess: () => {
+      toast("Playground succesfully renamed");
+    },
+  });
+
+  const deleteMutation = api.playground.deletePlayground.useMutation({
+    onSuccess: () => {
+      toast("Playground succesfully deleted");
+    },
+  });
+
   const formatRelativeTime = (dateString: Date) => {
     const date = new Date(dateString);
     const diffInSeconds = Math.floor((Date.now() - date.getTime()) / 1000);
@@ -45,10 +89,80 @@ export function PlaygroundMenu({
     return date.toLocaleDateString();
   };
 
-  // Filter playgrounds based on search query
-  const filteredPlaygrounds = playgrounds.filter((playground) =>
-    playground.figure.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const escapedQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // build a case-insensitive regex
+  const regex = new RegExp(escapedQuery, "i");
+
+  const filteredPlaygrounds = playgrounds.filter((playground) => {
+    const nameToTest = playground.name ?? "";
+    const idLabel = `Playground ${playground.id}`;
+
+    return regex.test(nameToTest) || regex.test(idLabel);
+  });
+
+  const handleRenameClick = (e: React.MouseEvent, playground: Playground) => {
+    e.stopPropagation();
+    setCurrentPlayground(playground);
+    setNewName(playground.name || `Playground ${playground.id}`);
+    setIsRenameDialogOpen(true);
+  };
+
+  // Submit rename operation
+  const handleRenameSubmit = async () => {
+    if (!currentPlayground || !newName.trim()) return;
+
+    setIsLoading(true);
+    try {
+      // Call parent handler if provided
+      renameMutation.mutate({
+        ...currentPlayground,
+        playgroundId: currentPlayground.id,
+        name: newName.trim(),
+        figureCode: currentPlayground.figure,
+        canvasCode: currentPlayground.canvas,
+      });
+
+      // Update local state
+      setPlaygrounds(
+        playgrounds.map((p) =>
+          p.id === currentPlayground.id ? { ...p, name: newName.trim() } : p,
+        ),
+      );
+
+      setIsRenameDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to rename playground:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent, playground: Playground) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setPlaygroundToDelete(playground);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!playgroundToDelete) return;
+
+    setIsLoading(true);
+    try {
+      // Call parent handler if provided
+      deleteMutation.mutate({
+        id: playgroundToDelete.id,
+      });
+
+      // Update local state
+      setPlaygrounds(playgrounds.filter((p) => p.id !== playgroundToDelete.id));
+      setIsDeleteDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to delete playground:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="mx-auto w-full max-w-4xl p-4">
@@ -80,14 +194,18 @@ export function PlaygroundMenu({
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="flex items-center text-lg">
-                      {playground.name ?? `Playground ${playground.id}`}
+                      {playground.name || `Playground ${playground.id}`}
                     </CardTitle>
                     <CardDescription className="text-gray-400">
-                      Date: {playground.createdAt.toLocaleDateString()}...
+                      Date:{" "}
+                      {new Date(playground.createdAt).toLocaleDateString()}
                     </CardDescription>
                   </div>
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger
+                      asChild
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <Button
                         variant="ghost"
                         className="h-8 w-8 p-0 text-gray-400 hover:text-white"
@@ -99,10 +217,16 @@ export function PlaygroundMenu({
                       align="end"
                       className="border-gray-700 bg-gray-800 text-white"
                     >
-                      <DropdownMenuItem className="cursor-pointer hover:bg-gray-700">
+                      <DropdownMenuItem
+                        className="cursor-pointer hover:bg-gray-700"
+                        onClick={(e) => handleRenameClick(e, playground)}
+                      >
                         Rename
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer text-red-500 hover:bg-gray-700">
+                      <DropdownMenuItem
+                        className="cursor-pointer text-red-500 hover:bg-gray-700"
+                        onClick={(e) => handleDeleteClick(e, playground)}
+                      >
                         <Trash2 className="mr-2 h-4 w-4" /> Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -128,6 +252,75 @@ export function PlaygroundMenu({
           </Card>
         </Link>
       </div>
+
+      {/* Rename Dialog */}
+      <Dialog open={isRenameDialogOpen} onOpenChange={setIsRenameDialogOpen}>
+        <DialogContent className="border-gray-700 bg-black text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Rename playground</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Enter a new name for this playground
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Input
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              className="border-gray-700 bg-gray-900 text-white"
+              placeholder="Enter playground name"
+              autoFocus
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsRenameDialogOpen(false)}
+              className="border-gray-600 bg-transparent text-white hover:bg-gray-700"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleRenameSubmit}
+              disabled={isLoading || !newName.trim()}
+              className="bg-[#F3B518] text-black hover:bg-[#d9a316]"
+            >
+              {isLoading ? "Saving..." : "Save"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent className="border-gray-700 bg-black text-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              {`This will permanently delete your playground "
+              ${
+                playgroundToDelete?.name ??
+                `Playground ${playgroundToDelete?.id}`
+              }
+              ". This action cannot be undone.`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-gray-600 bg-transparent text-white hover:bg-gray-700">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              disabled={isLoading}
+              className="bg-red-600 text-white hover:bg-red-700"
+            >
+              {isLoading ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

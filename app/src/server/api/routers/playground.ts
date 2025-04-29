@@ -110,4 +110,37 @@ export const playgroundRouter = createTRPCRouter({
         });
       }
     }),
+  deletePlayground: publicProcedure
+    .input(
+      z.object({
+        id: z.string().min(1, "Playground ID is required"),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session?.user?.id;
+      if (!userId) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User must be logged in to delete a playground",
+        });
+      }
+
+      // ensure it exists and belongs to this user
+      const existing = await db.playground.findUnique({
+        where: { id: input.id },
+      });
+      if (!existing || existing.createdById !== userId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Playground not found",
+        });
+      }
+
+      // delete and return the old record
+      const deleted = await db.playground.delete({
+        where: { id: input.id },
+      });
+
+      return deleted;
+    }),
 });
