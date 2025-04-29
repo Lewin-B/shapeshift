@@ -1,7 +1,7 @@
 "use client";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Card, CardContent } from "~/components/ui/card";
-import { Upload, ExternalLink, Loader2, AlertCircle } from "lucide-react";
+import { Upload, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 export default function SvgCard() {
   const [file, setFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string>("");
-  const [fileUrl, setFileUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const router = useRouter();
@@ -74,9 +73,6 @@ export default function SvgCard() {
 
             // Store the fileUrl in a variable
             const uploadedFileUrl = result.fileUrl;
-
-            // Update state with the file URL
-            setFileUrl(uploadedFileUrl);
             setUploadStatus("Upload successful! Redirecting to playground...");
 
             // Navigate to the playground with the file URL as a query parameter
