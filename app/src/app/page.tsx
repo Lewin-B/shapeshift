@@ -18,18 +18,6 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <div className="mt-12 flex min-h-screen w-full flex-col items-center justify-center bg-[radial-gradient(ellipse_156.03%_212.89%_at_93.68%_-5.52%,_#766251_0%,_#262013_35%,_#030303_70%,_#242015_93%)] px-4 py-8 md:flex-row md:items-center md:justify-start md:space-x-16 md:pl-10 lg:space-x-64 lg:pl-30">
-        <div className="block h-1/2 md:ml-[-175] md:hidden">
-          <CustomCanvas />
-          {/*
-          <Image
-            src="/logo.svg"
-            width={216}
-            height={376}
-            alt="shapeshift logo"
-            className="w-36 sm:w-40 md:w-48 lg:w-[216px]"
-          />
-          */}
-        </div>
         <div className="flex flex-col items-center justify-center space-y-6 text-center md:w-1/2 md:items-start md:text-left">
           <FadeinText
             text={"Take your creation to the next dimension."}
