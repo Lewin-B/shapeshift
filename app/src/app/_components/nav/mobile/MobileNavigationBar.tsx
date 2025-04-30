@@ -107,7 +107,11 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
               <MobileNavLink href={"/canvas"}>Canvas</MobileNavLink>
 
               {!user && (
-                <Button size="lg" onClick={GithubSignIn}>
+                <Button
+                  size="lg"
+                  onClick={GithubSignIn}
+                  className="bg-gray-900 text-[#FFD874] opacity-100"
+                >
                   Sign in with <GitHubLogoIcon className="ml-1" />
                 </Button>
               )}

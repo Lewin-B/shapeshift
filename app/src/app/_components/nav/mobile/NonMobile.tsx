@@ -121,7 +121,11 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user }) => {
         </CustomNavLink>
 
         {!user && (
-          <Button size="lg" onClick={GithubSignIn}>
+          <Button
+            size="lg"
+            onClick={GithubSignIn}
+            className="bg-black text-[#FFD874] opacity-100"
+          >
             Sign in with <GitHubLogoIcon className="ml-1" />
           </Button>
         )}
