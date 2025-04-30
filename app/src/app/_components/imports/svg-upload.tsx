@@ -1,10 +1,16 @@
 "use client";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Card, CardContent } from "~/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardFooter,
+} from "~/components/ui/card";
 import { Upload, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
+import { Progress } from "~/components/ui/progress";
 
 export default function SvgCard() {
   const [file, setFile] = useState<File | null>(null);
@@ -98,14 +104,30 @@ export default function SvgCard() {
   // If loading, display the loading screen
   if (isLoading) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-        <div className="rounded-xl bg-[#262013] p-8 text-center shadow-lg">
-          <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-[#F3B518]" />
-          <p className="font-['Instrument Sans'] text-xl text-white">
-            Transforming your SVG...
-          </p>
-          <p className="mt-2 text-[#F3B518]">{uploadStatus}</p>
-        </div>
+      <div className="fixed inset-0 z-50 flex w-screen items-center justify-center bg-black/80 backdrop-blur-sm">
+        <Card className="w-80 border-none bg-[#262013] shadow-xl">
+          <CardHeader className="pb-4">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#1a160d]">
+              <Loader2 className="h-10 w-10 animate-spin text-[#F3B518]" />
+            </div>
+          </CardHeader>
+          <CardContent className="pb-2 text-center">
+            <h3 className="font-['Instrument Sans'] text-xl font-medium text-white">
+              Transforming your SVG
+            </h3>
+            <Progress
+              className="mt-4 h-2 bg-[#3a3420]"
+              value={typeof uploadStatus === "number" ? uploadStatus : 75}
+            />
+          </CardContent>
+          <CardFooter className="pt-2 text-center">
+            <p className="w-full text-sm text-[#F3B518]">
+              {typeof uploadStatus === "string"
+                ? uploadStatus
+                : "Processing..."}
+            </p>
+          </CardFooter>
+        </Card>
       </div>
     );
   }
