@@ -118,7 +118,7 @@ const Editor = forwardRef<ReactPlaygroundHandle, EditorProps>(
       <Fragment>
         <SandpackLayout>
           {!isMobile && <SandpackCodeEditor style={{ height: "65vh" }} />}
-          <SandpackPreview style={{ height: isMobile ? "30vh" : "65vh" }} />
+          <SandpackPreview style={{ height: isMobile ? "50vh" : "65vh" }} />
         </SandpackLayout>
       </Fragment>
     );

@@ -106,6 +106,8 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
 
               <MobileNavLink href={"/canvas"}>Canvas</MobileNavLink>
 
+              {user && <MobileNavLink href={"/profile"}>Profile</MobileNavLink>}
+
               {!user && (
                 <Button
                   size="lg"
