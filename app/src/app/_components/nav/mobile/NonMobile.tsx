@@ -2,9 +2,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import type { LinkProps } from "next/link";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { GithubSignIn } from "../server/signin";
+import { Button } from "~/components/ui/button";
+import { useRouter } from "next/navigation";
 
 // Define routes as constants
 export const ROUTES = {
@@ -63,9 +67,11 @@ interface NonMobileNavbarProps {
 }
 
 // Main NonMobileNavbar component
-const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
+const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user }) => {
   const [hovering, setHovering] = useState(false);
   const [hovering2, setHovering2] = useState(false);
+
+  const router = useRouter();
 
   return (
     <div className="mx-12 hidden h-full flex-row items-center justify-between text-center md:flex">
@@ -115,13 +121,9 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
         </CustomNavLink>
 
         {!user && (
-          <button
-            onClick={() => signIn()}
-            className="relative flex h-full items-center justify-center rounded-lg bg-[#030303] px-8 py-2 font-medium text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10"
-          >
-            Login
-            <span className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-300 ease-in-out hover:w-full"></span>
-          </button>
+          <Button size="lg" onClick={GithubSignIn}>
+            Sign in with <GitHubLogoIcon className="ml-1" />
+          </Button>
         )}
 
         {user && (
@@ -135,7 +137,10 @@ const NonMobileNavbar: React.FC<NonMobileNavbarProps> = ({ user, pfp }) => {
             </Link>
 
             <button
-              onClick={() => signOut()}
+              onClick={async () => {
+                await signOut();
+                router.push("/");
+              }}
               className="relative flex h-full items-center justify-center rounded-lg px-8 py-2 font-normal text-white uppercase shadow-md transition-colors duration-300 hover:bg-white/10"
             >
               Logout

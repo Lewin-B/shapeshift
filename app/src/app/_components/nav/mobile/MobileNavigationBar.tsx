@@ -3,9 +3,12 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import type { LinkProps } from "next/link";
+import { GithubSignIn } from "../server/signin";
+import { Button } from "~/components/ui/button";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 const OVERLAY_CLASS =
   "absolute left-0 top-16 z-50 flex h-96 w-full flex-col items-center justify-center bg-black/90 bg-opacity-5 shadow-md backdrop-blur-3xl backdrop-filter md:hidden";
@@ -46,14 +49,6 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
   mobileNavbar,
 }) => {
   const router = useRouter();
-
-  const MOBILE_ROUTES = {
-    HOME: "/",
-    SEARCH: "/search",
-    DISCOVER: "/discover",
-    EDIT: "/edit",
-    USER: `/user/${user?.email}`,
-  };
 
   return (
     <>
@@ -112,14 +107,16 @@ const MobileNavigationBar: React.FC<MobileNavigationBarProps> = ({
               <MobileNavLink href={"/canvas"}>Canvas</MobileNavLink>
 
               {!user && (
-                <button onClick={() => console.log("sign in")}></button>
+                <Button size="lg" onClick={GithubSignIn}>
+                  Sign in with <GitHubLogoIcon className="ml-1" />
+                </Button>
               )}
 
               {user && (
                 <>
                   <button
-                    onClick={() => {
-                      console.log("sign in");
+                    onClick={async () => {
+                      await signOut();
                       router.push("/");
                     }}
                     className="mt-4 text-xl font-light text-white uppercase"
