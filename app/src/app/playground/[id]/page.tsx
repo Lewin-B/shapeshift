@@ -202,7 +202,7 @@ export default function Page() {
             <div className="mt-4 px-4">
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="w-full bg-[#F3B518] text-black hover:bg-[#d49d14]">
+                  <Button className="hidden w-full bg-[#F3B518] text-black hover:bg-[#d49d14] md:block">
                     <Save className="h-4 w-4" /> Save Settings
                   </Button>
                 </DialogTrigger>
