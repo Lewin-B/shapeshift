@@ -90,15 +90,19 @@ export function PlaygroundMenu({
   };
 
   const escapedQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  // build a case-insensitive regex
   const regex = new RegExp(escapedQuery, "i");
 
-  const filteredPlaygrounds = playgrounds.filter((playground) => {
-    const nameToTest = playground.name ?? "";
-    const idLabel = `Playground ${playground.id}`;
+  const filteredPlaygrounds = playgrounds
+    .filter((playground) => {
+      const nameToTest = playground.name ?? "";
+      const idLabel = `Playground ${playground.id}`;
 
-    return regex.test(nameToTest) || regex.test(idLabel);
-  });
+      return regex.test(nameToTest) || regex.test(idLabel);
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+    );
 
   const handleRenameClick = (e: React.MouseEvent, playground: Playground) => {
     e.stopPropagation();
