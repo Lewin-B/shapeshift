@@ -20,6 +20,8 @@ model Playground {
     name   String
     canvas String
     figure String
+    app    String
+    style  String
 
     // visual settings
     depth   Int

@@ -48,6 +48,8 @@ const Editor = forwardRef<ReactPlaygroundHandle, EditorProps>(
       handleSave: (playgroundName, settings, id) => {
         const figureCode = sandpack.files["/figure.tsx"]?.code;
         const canvasCode = sandpack.files["/canvas.tsx"]?.code;
+        const appCode = sandpack.files["/App.js"]?.code;
+        const appStyle = sandpack.files["/App.css"]?.code;
 
         const {
           depth,
@@ -65,6 +67,8 @@ const Editor = forwardRef<ReactPlaygroundHandle, EditorProps>(
           name: playgroundName,
           figureCode: figureCode ?? "",
           canvasCode: canvasCode ?? "",
+          appCode: appCode ?? "",
+          styleCode: appStyle ?? "",
           depth,
           size,
           rotateX,
@@ -124,11 +128,14 @@ Editor.displayName = "Editor";
 
 type ReactPlaygroundProps = {
   id?: string;
+  canvas?: string;
+  app?: string;
+  style?: string;
   figure: string;
 };
 
 const ReactPlayground = forwardRef<ReactPlaygroundHandle, ReactPlaygroundProps>(
-  ({ figure }, ref) => {
+  ({ figure, canvas, app, style }, ref) => {
     const urlRegex = /(https:\/\/storage\.googleapis\.com\/[^"']+\.svg)/;
     const match = urlRegex.exec(figure);
 
@@ -140,10 +147,10 @@ const ReactPlayground = forwardRef<ReactPlaygroundHandle, ReactPlaygroundProps>(
     return (
       <SandpackProvider
         files={{
-          "/App.js": appFile,
+          "/App.js": app ?? appFile,
           "/figure.tsx": figure,
-          "/canvas.tsx": canvasFile,
-          "/App.css": appCssFile,
+          "/canvas.tsx": canvas ?? canvasFile,
+          "/App.css": style ?? appCssFile,
         }}
         template="react"
         theme={amethyst}

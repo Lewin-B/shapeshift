@@ -92,11 +92,13 @@ export default function Page() {
     redirect("/profile");
   };
 
-  const figure = buildFigureFile(settings);
+  const initialFigureRef = useRef(buildFigureFile(settings));
 
   const playgroundElement = useMemo(
-    () => <ReactPlayground ref={playgroundRef} figure={figure} />,
-    [figure],
+    () => (
+      <ReactPlayground ref={playgroundRef} figure={initialFigureRef.current} />
+    ),
+    [],
   );
 
   return (

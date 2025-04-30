@@ -120,6 +120,8 @@ export function PlaygroundMenu({
         name: newName.trim(),
         figureCode: currentPlayground.figure,
         canvasCode: currentPlayground.canvas,
+        appCode: currentPlayground.app,
+        styleCode: currentPlayground.style,
       });
 
       // Update local state

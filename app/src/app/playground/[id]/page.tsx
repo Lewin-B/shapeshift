@@ -99,9 +99,20 @@ export default function Page() {
 
   const playgroundElement = useMemo(
     () => (
-      <ReactPlayground ref={playgroundRef} figure={playground?.figure ?? ""} />
+      <ReactPlayground
+        ref={playgroundRef}
+        figure={playground?.figure ?? ""}
+        canvas={playground?.canvas}
+        app={playground?.app}
+        style={playground?.style}
+      />
     ),
-    [playground?.figure],
+    [
+      playground?.figure,
+      playground?.canvas,
+      playground?.app,
+      playground?.style,
+    ],
   );
 
   const handleSave = () => {

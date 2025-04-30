@@ -16,7 +16,8 @@ export const playgroundRouter = createTRPCRouter({
         name: z.string().min(1, "Name can not be empty"),
         figureCode: z.string().min(1, "Figure code can not be empty"),
         canvasCode: z.string().min(1, "Canvas code can not be empty"),
-        // --- add validations for your new settings ---
+        appCode: z.string().min(1, "Need app js file"),
+        styleCode: z.string().min(1, "Need style file"),
         depth: z.number(),
         size: z.number(),
         rotateX: z.string(),
@@ -36,14 +37,14 @@ export const playgroundRouter = createTRPCRouter({
         });
       }
 
-      // build the common data payload
       const data = {
         name: input.name,
         figure: input.figureCode,
         canvas: input.canvasCode,
-        // --- include your new settings ---
         depth: input.depth,
         size: input.size,
+        app: input.appCode,
+        style: input.styleCode,
         rotateX: input.rotateX,
         rotateY: input.rotateY,
         rotateZ: input.rotateZ,
