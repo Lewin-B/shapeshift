@@ -32,6 +32,15 @@ model Playground {
     bounceX String
     bounceY String
     bounceZ String
+    color   String
+
+    //Extrude settings
+    steps          Int
+    bevelEnabled   Boolean
+    bevelThickness Int
+    bevelSize      Int
+    bevelOffset    Int
+    bevelSegments  Int
 }
 
 // Necessary for Next auth

@@ -25,7 +25,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
-import { AppSidebar } from "~/components/app-sidebar";
+import { AppSidebar, type ExtrudeSettings } from "~/components/app-sidebar";
 import { MobileControlMenu } from "~/components/mobile-menu";
 import { useState, useRef, useMemo, useEffect } from "react";
 import type { ReactPlaygroundHandle } from "../../_components/playground/react-playground";
@@ -41,6 +41,15 @@ export default function Page() {
   const [bounceX, setBounceX] = useState<string>("");
   const [bounceY, setBounceY] = useState<string>("");
   const [bounceZ, setBounceZ] = useState<string>("");
+  const [color, setColor] = useState<string>("");
+  const [extrudeSettings, setExtrudeSettings] = useState<ExtrudeSettings>({
+    steps: 12,
+    bevelEnabled: true,
+    bevelThickness: 1,
+    bevelSize: 1,
+    bevelOffset: 0,
+    bevelSegments: 1,
+  });
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const playgroundRef = useRef<ReactPlaygroundHandle>(null);
@@ -62,6 +71,15 @@ export default function Page() {
     setBounceX(playground.bounceX);
     setBounceY(playground.bounceY);
     setBounceZ(playground.bounceZ);
+    setColor(playground.color);
+    setExtrudeSettings({
+      steps: playground.steps ?? 12,
+      bevelEnabled: playground.bevelEnabled ?? true,
+      bevelThickness: playground.bevelThickness ?? 1,
+      bevelSize: playground.bevelSize ?? 1,
+      bevelOffset: playground.bevelOffset ?? 0,
+      bevelSegments: playground.bevelSegments ?? 1,
+    });
   }, [playground]);
 
   useEffect(() => {
@@ -72,6 +90,8 @@ export default function Page() {
 
   const settings = useMemo(
     () => ({
+      color,
+      setColor,
       depth,
       setDepth,
       size,
@@ -89,8 +109,21 @@ export default function Page() {
       setBounceY,
       bounceZ,
       setBounceZ,
+      extrudeSettings,
+      setExtrudeSettings,
     }),
-    [depth, size, rotateX, rotateY, rotateZ, bounceX, bounceY, bounceZ],
+    [
+      depth,
+      size,
+      rotateX,
+      rotateY,
+      rotateZ,
+      bounceX,
+      bounceY,
+      bounceZ,
+      color,
+      extrudeSettings,
+    ],
   );
 
   useEffect(() => {

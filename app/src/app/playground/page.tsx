@@ -31,6 +31,7 @@ import { MobileControlMenu } from "~/components/mobile-menu";
 import { useState, useRef, useMemo, useEffect } from "react";
 import type { ReactPlaygroundHandle } from "../_components/playground/react-playground";
 import { buildFigureFile } from "../_components/playground/files";
+import type { ExtrudeSettings } from "~/components/app-sidebar";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -43,13 +44,24 @@ export default function Page() {
   const [bounceX, setBounceX] = useState<string>("");
   const [bounceY, setBounceY] = useState<string>("");
   const [bounceZ, setBounceZ] = useState<string>("");
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [playgroundName, setPlaygroundName] = useState("");
+  const [color, setColor] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [playgroundName, setPlaygroundName] = useState<string>("");
+  const [extrudeSettings, setExtrudeSettings] = useState<ExtrudeSettings>({
+    steps: 12,
+    bevelEnabled: true,
+    bevelThickness: 1,
+    bevelSize: 1,
+    bevelOffset: 0,
+    bevelSegments: 1,
+  });
 
   const playgroundRef = useRef<ReactPlaygroundHandle>(null);
 
   const settings = useMemo(
     () => ({
+      color,
+      setColor,
       depth,
       setDepth,
       size,
@@ -67,8 +79,11 @@ export default function Page() {
       setBounceY,
       bounceZ,
       setBounceZ,
+      extrudeSettings,
+      setExtrudeSettings,
     }),
     [
+      color,
       depth,
       size,
       rotateX,
@@ -78,6 +93,7 @@ export default function Page() {
       bounceY,
       bounceZ,
       fileUrl,
+      extrudeSettings,
     ],
   );
 

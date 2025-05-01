@@ -97,11 +97,10 @@ export default function SvgCard() {
     } catch (error) {
       console.error("Error processing file:", error);
       setUploadStatus(`Error processing file: `);
-      setIsLoading(false); // End loading on error
+      setIsLoading(false);
     }
   };
 
-  // If loading, display the loading screen
   if (isLoading) {
     return (
       <div className="fixed inset-0 z-50 flex w-screen items-center justify-center bg-black/80 backdrop-blur-sm">

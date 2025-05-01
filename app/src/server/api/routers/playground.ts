@@ -26,6 +26,13 @@ export const playgroundRouter = createTRPCRouter({
         bounceX: z.string(),
         bounceY: z.string(),
         bounceZ: z.string(),
+        color: z.string(),
+        steps: z.number(),
+        bevelEnabled: z.boolean(),
+        bevelThickness: z.number(),
+        bevelSize: z.number(),
+        bevelOffset: z.number(),
+        bevelSegments: z.number(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -51,6 +58,13 @@ export const playgroundRouter = createTRPCRouter({
         bounceX: input.bounceX,
         bounceY: input.bounceY,
         bounceZ: input.bounceZ,
+        steps: input.steps,
+        bevelEnabled: input.bevelEnabled,
+        bevelThickness: input.bevelThickness,
+        bevelSize: input.bevelSize,
+        bevelOffset: input.bevelOffset,
+        bevelSegments: input.bevelSegments,
+        color: input.color,
       };
 
       if (input.playgroundId) {

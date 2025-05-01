@@ -2,6 +2,7 @@
 
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
+import type { ExtrudeSettings } from "~/components/app-sidebar";
 
 export function buildFigureGroup({
   depth,
@@ -127,6 +128,8 @@ export const buildFigureFile = ({
   bounceX,
   bounceY,
   bounceZ,
+  color,
+  extrudeSettings,
 }: {
   depth: number;
   size: number;
@@ -137,6 +140,8 @@ export const buildFigureFile = ({
   bounceX: string;
   bounceY: string;
   bounceZ: string;
+  color: string;
+  extrudeSettings: ExtrudeSettings;
 }) => {
   const figureFile = `
 "use client";
@@ -200,14 +205,20 @@ const SvgFigure = () => {
 
       // Basic material
       const material = new THREE.MeshBasicMaterial({
-        color: path.color,
+        color: ${color ? `"${color}"` : `path.color`},
         side: THREE.DoubleSide,
         depthWrite: false,
       });
 
       shapes.forEach((shape, shapeIndex) => {
         const extrudeSettings = {
+          steps: ${extrudeSettings.steps},
           depth: ${depth},
+          bevelEnabled: ${extrudeSettings.bevelEnabled},
+          bevelThickness: ${extrudeSettings.bevelThickness},
+          bevelSize: ${extrudeSettings.bevelSize},
+          bevelOffset: ${extrudeSettings.bevelOffset},
+          bevelSegments: ${extrudeSettings.bevelSegments}
         };
 
         const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);

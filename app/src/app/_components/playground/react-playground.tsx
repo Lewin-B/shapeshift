@@ -60,6 +60,8 @@ const Editor = forwardRef<ReactPlaygroundHandle, EditorProps>(
           bounceX,
           bounceY,
           bounceZ,
+          color,
+          extrudeSettings,
         } = settings;
 
         createPlayground.mutate({
@@ -69,6 +71,13 @@ const Editor = forwardRef<ReactPlaygroundHandle, EditorProps>(
           canvasCode: canvasCode ?? "",
           appCode: appCode ?? "",
           styleCode: appStyle ?? "",
+          steps: extrudeSettings.steps,
+          bevelEnabled: extrudeSettings.bevelEnabled,
+          bevelThickness: extrudeSettings.bevelThickness,
+          bevelSize: extrudeSettings.bevelSize,
+          bevelOffset: extrudeSettings.bevelOffset,
+          bevelSegments: extrudeSettings.bevelSegments,
+          color,
           depth,
           size,
           rotateX,
@@ -89,6 +98,8 @@ const Editor = forwardRef<ReactPlaygroundHandle, EditorProps>(
           bounceX,
           bounceY,
           bounceZ,
+          color,
+          extrudeSettings,
         } = settings;
 
         const newCode = buildFigureFile({
@@ -101,6 +112,8 @@ const Editor = forwardRef<ReactPlaygroundHandle, EditorProps>(
           bounceX,
           bounceY,
           bounceZ,
+          color,
+          extrudeSettings,
         });
         updateFile("/figure.tsx", newCode);
       },
