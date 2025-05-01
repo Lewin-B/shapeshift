@@ -10,7 +10,6 @@ import { Upload, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
-import { Progress } from "~/components/ui/progress";
 
 export default function SvgCard() {
   const [file, setFile] = useState<File | null>(null);
@@ -114,10 +113,6 @@ export default function SvgCard() {
             <h3 className="font-['Instrument Sans'] text-xl font-medium text-white">
               Transforming your SVG
             </h3>
-            <Progress
-              className="mt-4 h-2 bg-[#3a3420]"
-              value={typeof uploadStatus === "number" ? uploadStatus : 75}
-            />
           </CardContent>
           <CardFooter className="pt-2 text-center">
             <p className="w-full text-sm text-[#F3B518]">
