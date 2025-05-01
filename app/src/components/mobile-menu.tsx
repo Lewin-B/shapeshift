@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { Separator } from "~/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   Scale3D,
@@ -69,7 +68,6 @@ type MobileControlMenuProps = {
 export function MobileControlMenu({ settings }: MobileControlMenuProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const {
-    svgUrl,
     depth,
     setDepth,
     size,
