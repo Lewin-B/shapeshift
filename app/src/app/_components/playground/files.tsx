@@ -144,7 +144,6 @@ export const buildFigureFile = ({
   extrudeSettings: ExtrudeSettings;
 }) => {
   const figureFile = `
-"use client";
 import React, { useRef, useMemo, useState } from "react";
 import { useLoader } from "@react-three/fiber";
 import * as THREE from "three";
@@ -249,56 +248,55 @@ export default SvgFigure;
 };
 
 export const canvasFile = `
-    "use client";
-    import { Canvas } from "@react-three/fiber";
-    import { OrbitControls, Text } from "@react-three/drei";
-    import Figure from "./figure";
-    import { Suspense } from "react";
-  
-    const Loading = () => {
-      return <Text>Loading</Text>;
-    };
-  
-    const Scene = () => {
-      return (
-        <>
-          <OrbitControls enableZoom={true} enablePan={true} />
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={1} />
-          <Figure />
-        </>
-      );
-    };
-  
-    export const CustomCanvas = () => {
-      return (
-        <Canvas camera={{ position: [0, 0, 50] }}>
-          <Suspense fallback={<Loading />}>
-            <Scene />
-          </Suspense>
-        </Canvas>
-      );
-    };
-  
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Text } from "@react-three/drei";
+import Figure from "./figure";
+import { Suspense } from "react";
+
+const Loading = () => {
+  return <Text>Loading</Text>;
+};
+
+const Scene = () => {
+return (
+  <>
+    <OrbitControls enableZoom={true} enablePan={true} />
+    <ambientLight intensity={0.5} />
+    <directionalLight position={[10, 10, 5]} intensity={1} />
+    <Figure />
+  </>
+);
+};
+
+export const CustomCanvas = () => {
+return (
+  <Canvas camera={{ position: [0, 0, 50] }}>
+    <Suspense fallback={<Loading />}>
+      <Scene />
+    </Suspense>
+  </Canvas>
+);
+};
+
     `;
 
 export const appFile = `
-    import { CustomCanvas } from "./canvas.tsx"
-    import "./App.css";
+import { CustomCanvas } from "./canvas.tsx"
+import "./App.css";
 
-    export default function App() {
-    return (
-        <>
-          <div id="canvas-container">
-              <CustomCanvas />
-          </div>
-        </>
-      );
-    }
+export default function App() {
+return (
+    <>
+      <div id="canvas-container">
+          <CustomCanvas />
+      </div>
+    </>
+  );
+}
     `;
 
 export const appCssFile = `
-    #canvas-container {
-        height: 500px;
-    }
+#canvas-container {
+    height: 500px;
+}
 `;
