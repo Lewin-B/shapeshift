@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 
-export default function FAQSection() {
+export default function FAQ() {
   const faqs = [
     {
       id: "item-1",
@@ -36,13 +36,12 @@ export default function FAQSection() {
       question:
         "What are the system requirements for running your application?",
       answer:
-        "All that is needed to install the react three fiber dependencies onto your project",
+        "All that is needed is to install the react three fiber dependencies onto your project",
     },
     {
       id: "item-6",
       question: "What web development platforms do you support",
-      ansewr:
-        "Currently only react altough it hopefully won't stay that way for long",
+      answer: "Currently only React. Hopefully it won't stay that way for long",
     },
   ];
 
@@ -51,7 +50,7 @@ export default function FAQSection() {
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter text-[#F3B518] sm:text-5xl">
+            <h2 className="text-3xl font-bold tracking-tighter text-white sm:text-5xl">
               Frequently Asked Questions
             </h2>
             <p className="mx-auto max-w-[700px] text-zinc-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">

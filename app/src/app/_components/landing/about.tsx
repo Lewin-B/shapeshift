@@ -9,7 +9,6 @@ import { ChevronRight, Code, Layers, Zap } from "lucide-react";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { CustomCanvas } from "./canvas";
-import Link from "next/link";
 
 const CodeBlock = ({
   code,
@@ -100,7 +99,7 @@ const FeatureCard = ({
   );
 };
 
-export default function AboutSection() {
+export default function About() {
   const sampleCode = `// Transform SVG to 3D model
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader'
 import { Canvas } from '@react-three/fiber'
@@ -224,29 +223,6 @@ function SVGTo3D({ svgPath }) {
             </div>
           </motion.div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          viewport={{ once: true }}
-          className="mx-auto mt-8 flex max-w-md flex-col items-center justify-center space-y-4 text-center"
-        >
-          <h3 className="text-2xl font-bold text-white">
-            Ready to transform your designs?
-          </h3>
-          <p className="text-zinc-400">
-            Enter the Playground and start building your 3d models.
-          </p>
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <Link
-              href={"/menu"}
-              className="inline-flex h-10 items-center justify-center rounded-md bg-[#F3B518] px-8 text-sm font-medium text-black shadow transition-colors hover:bg-[#F3B518]/90"
-            >
-              Get Started
-            </Link>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
