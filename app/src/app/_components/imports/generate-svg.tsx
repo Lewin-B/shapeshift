@@ -6,12 +6,11 @@ import {
   CardHeader,
   CardFooter,
 } from "~/components/ui/card";
-import { Wand2 } from "lucide-react";
+import { Wand2, Loader2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
 
 export default function SvgGeneratorCard() {
   const [prompt, setPrompt] = useState<string>("");
@@ -28,27 +27,23 @@ export default function SvgGeneratorCard() {
 
     if (!prompt.trim()) {
       setGenerationStatus("No prompt entered");
+      setIsLoading(false);
       return;
     }
 
     try {
-      // Call the tRPC procedure to generate the SVG
       const result = await generateMutation.mutateAsync({
         prompt: prompt.trim(),
         filename: `generated-${Date.now()}.svg`,
       });
 
-      // Store the fileUrl in a variable
       const generatedFileUrl = result.publicUrl;
       console.log("Generated SVG URL:", generatedFileUrl);
 
-      // Update state with the file URL
       setGenerationStatus(
         "Generation successful! Redirecting to playground...",
       );
 
-      // Navigate to the playground with the file URL as a query parameter
-      // Using setTimeout to give the user a moment to see the success message
       setTimeout(() => {
         const encodedUrl = encodeURIComponent(generatedFileUrl);
         void router.push(`/playground?fileUrl=${encodedUrl}`);
@@ -93,6 +88,11 @@ export default function SvgGeneratorCard() {
       className="flex h-auto w-auto justify-center rounded-[50px] bg-black/5 shadow-[inset_0px_4px_41.099998474121094px_3px_rgba(253,250,250,0.50)]"
     >
       <CardContent className="flex flex-col items-center justify-center space-y-4">
+        {/* Warning about experimental status */}
+        <p className="max-w-xs text-center text-sm text-yellow-400 italic">
+          ⚠️ This SVG generator is experimental and may not work reliably. Use
+          it only for very basic drawings.
+        </p>
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="flex w-full items-center justify-center">
             <div className="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg">
@@ -124,7 +124,11 @@ export default function SvgGeneratorCard() {
           )}
           {generationStatus && (
             <p
-              className={`text-center text-sm ${generationStatus.includes("failed") ? "text-red-400" : "text-green-400"}`}
+              className={`text-center text-sm ${
+                generationStatus.includes("failed")
+                  ? "text-red-400"
+                  : "text-green-400"
+              }`}
             >
               {generationStatus}
             </p>
