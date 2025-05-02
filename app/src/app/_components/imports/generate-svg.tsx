@@ -1,22 +1,30 @@
 "use client";
 import { useState, type FormEvent } from "react";
-import { Card, CardContent } from "~/components/ui/card";
-import { Wand2, ExternalLink } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardFooter,
+} from "~/components/ui/card";
+import { Wand2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 export default function SvgGeneratorCard() {
   const [prompt, setPrompt] = useState<string>("");
   const [generationStatus, setGenerationStatus] = useState<string>("");
-  const [fileUrl, setFileUrl] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const generateMutation = api.svg.generateSvg.useMutation();
 
   const handleSubmit = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     if (!prompt.trim()) {
       setGenerationStatus("No prompt entered");
@@ -35,7 +43,6 @@ export default function SvgGeneratorCard() {
       console.log("Generated SVG URL:", generatedFileUrl);
 
       // Update state with the file URL
-      setFileUrl(generatedFileUrl);
       setGenerationStatus(
         "Generation successful! Redirecting to playground...",
       );
@@ -49,8 +56,36 @@ export default function SvgGeneratorCard() {
     } catch (error) {
       console.error("SVG generation failed:", error);
       setGenerationStatus("Generation failed");
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex w-screen items-center justify-center bg-black/80 backdrop-blur-sm">
+        <Card className="w-80 border-none bg-[#262013] shadow-xl">
+          <CardHeader className="pb-4">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#1a160d]">
+              <Loader2 className="h-10 w-10 animate-spin text-[#F3B518]" />
+            </div>
+          </CardHeader>
+          <CardContent className="pb-2 text-center">
+            <h3 className="font-['Instrument Sans'] text-xl font-medium text-white">
+              Transforming your SVG
+            </h3>
+          </CardContent>
+          <CardFooter className="pt-2 text-center">
+            <p className="w-full text-sm text-[#F3B518]">
+              {typeof generationStatus === "string"
+                ? generationStatus
+                : "Processing..."}
+            </p>
+          </CardFooter>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <Card

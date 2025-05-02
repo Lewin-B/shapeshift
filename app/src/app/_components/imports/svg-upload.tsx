@@ -78,7 +78,7 @@ export default function SvgCard() {
 
             // Store the fileUrl in a variable
             const uploadedFileUrl = result.fileUrl;
-            setUploadStatus("Upload successful! Redirecting to playground...");
+            setUploadStatus("Transform successful! Entering playground...");
 
             // Navigate to the playground with the file URL as a query parameter
             // Using setTimeout to give the user a moment to see the success message
