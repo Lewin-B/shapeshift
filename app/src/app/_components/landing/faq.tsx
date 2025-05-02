@@ -11,7 +11,7 @@ export default function FAQ() {
       id: "item-1",
       question: "What makes your 3D modeling tool different from others?",
       answer:
-        "Our platform combines intuitive design with powerful features, making it accessible for beginners while providing the advanced tools professionals need. We offer real-time collaboration, cloud-based storage, and industry-leading export options all in one seamless experience.",
+        "Our platform combines intuitive design with powerful features, making it accessible for beginners- actually idk what I'm talking about this is really just a tool for convenience.",
     },
     {
       id: "item-2",
@@ -41,7 +41,8 @@ export default function FAQ() {
     {
       id: "item-6",
       question: "What web development platforms do you support",
-      answer: "Currently only React. Hopefully it won't stay that way for long",
+      answer:
+        "Currently only React. Hopefully it doesn't stay that way for long",
     },
   ];
 
