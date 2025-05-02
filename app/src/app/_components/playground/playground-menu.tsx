@@ -25,6 +25,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 import { AppSidebar } from "~/components/app-sidebar";
 import { MobileControlMenu } from "~/components/mobile-menu";
@@ -32,6 +33,7 @@ import { useState, useRef, useMemo, useEffect } from "react";
 import type { ReactPlaygroundHandle } from "./react-playground";
 import { buildFigureFile } from "./files";
 import type { ExtrudeSettings } from "~/components/app-sidebar";
+import { toast } from "sonner";
 
 export default function PlaygroundMenu() {
   const searchParams = useSearchParams();
@@ -55,6 +57,8 @@ export default function PlaygroundMenu() {
     bevelOffset: 0,
     bevelSegments: 1,
   });
+
+  const { data: session } = useSession();
 
   const playgroundRef = useRef<ReactPlaygroundHandle>(null);
 
@@ -102,7 +106,14 @@ export default function PlaygroundMenu() {
   }, [settings]);
 
   const handleSave = () => {
-    if (!playgroundRef.current) return;
+    if (!session?.user) {
+      toast("Must be logged in to save your playground session");
+      return;
+    }
+    if (!playgroundRef.current) {
+      toast("Error saving");
+      return;
+    }
     playgroundRef.current.handleSave(playgroundName, settings);
 
     redirect("/profile");

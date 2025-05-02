@@ -7,7 +7,7 @@ export default async function Page() {
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/");
+    redirect("/login");
   }
 
   const [playgrounds] = await Promise.all([api.playground.fetchPlaygrounds()]);

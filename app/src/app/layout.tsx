@@ -8,6 +8,7 @@ import type { Session } from "next-auth";
 import type React from "react";
 import { Inter } from "next/font/google";
 import type { LinkProps } from "next/link";
+import { Toaster } from "~/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,6 +43,7 @@ export default function RootLayout({
               <Navbar />
               {children}
             </ThemeProvider>
+            <Toaster />
           </AuthProvider>
         </NextAuthProvider>
       </body>
