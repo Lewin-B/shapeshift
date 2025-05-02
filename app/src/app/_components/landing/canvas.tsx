@@ -19,9 +19,9 @@ const Scene = () => {
   );
 };
 
-export const CustomCanvas = () => {
+export const CustomCanvas = ({ className }: { className: string }) => {
   return (
-    <div className="h-3/4 w-[60vh] md:h-screen">
+    <div className={className}>
       <Canvas camera={{ position: [0, 0, 50] }}>
         <Suspense fallback={<Loading />}>
           <Scene />

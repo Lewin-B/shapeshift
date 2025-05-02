@@ -30,7 +30,7 @@ export default function Hero() {
         </Link>
       </div>
       <div className="hidden md:ml-[-175] md:block">
-        <CustomCanvas />
+        <CustomCanvas className="h-3/4 w-[60vh] md:h-screen" />
         {/*
           <Image
             src="/logo.svg"
