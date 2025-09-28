@@ -1,48 +1,62 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import tseslint from "typescript-eslint";
+// @ts-check
+const { FlatCompat } = require('@eslint/eslintrc')
+const path = require('path')
 
 const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-});
+  baseDirectory: path.resolve(__dirname),
+  resolvePluginsRelativeTo: path.resolve(__dirname),
+})
 
-export default tseslint.config(
+/** @type {import('eslint').Linter.Config} */
+module.exports = [
+  ...
   {
-    ignores: [".next"],
-  },
-  ...compat.extends("next/core-web-vitals"),
-  {
-    files: ["**/*.ts", "**/*.tsx"],
-    extends: [
-      ...tseslint.configs.recommended,
-      ...tseslint.configs.recommendedTypeChecked,
-      ...tseslint.configs.stylisticTypeChecked,
-    ],
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      '@stylistic': require('@stylistic/eslint-plugin')
+    },
     rules: {
-      "@typescript-eslint/array-type": "off",
-      "@typescript-eslint/consistent-type-definitions": "off",
-      "@typescript-eslint/consistent-type-imports": [
-        "warn",
-        { prefer: "type-imports", fixStyle: "inline-type-imports" },
-      ],
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_" },
-      ],
-      "@typescript-eslint/require-await": "off",
-      "@typescript-eslint/no-misused-promises": [
-        "error",
-        { checksVoidReturn: { attributes: false } },
-      ],
-    },
+      '@stylistic/semi': ['error', 'never'],
+      '@stylistic/quotes': ['error', 'single'],
+      '@stylistic/quote-props': ['error', 'consistent']
+    }
   },
+  ...compat.extends(
+    'next/core-web-vitals',
+    'plugin:@typescript-eslint/recommended',
+    'prettier'
+  ),
   {
-    linterOptions: {
-      reportUnusedDisableDirectives: true,
-    },
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
-    },
-  },
-);
+    files: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', 'src/**/*.jsx'],
+    rules: {
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+            'object',
+            'type'
+          ],
+          pathGroups: [
+            {
+              pattern: 'react*',
+              group: 'external',
+              position: 'before'
+            }
+          ],
+          pathGroupsExcludedImportTypes: ['react'],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true
+          }
+        }
+      ]
+    }
+  }
+]
