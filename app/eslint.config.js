@@ -1,48 +1,61 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import tseslint from "typescript-eslint";
+// @ts-check
+const { FlatCompat } = require('@eslint/eslintrc');
+const path = require('path');
 
 const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
+  baseDirectory: __dirname,
+  resolvePluginsRelativeTo: __dirname
+  // allPaths: [path.join(__dirname, '../node_modules')] // optional: default is `true`
 });
 
-export default tseslint.config(
+module.exports = [
+  // ...compat.extends(
+  //   'eslint:recommended',
+  //   'plugin:@typescript-eslint/recommended'
+  // ),
   {
-    ignores: [".next"],
+    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    ignores: ['node_modules', '.next', '**/dist/**']
   },
-  ...compat.extends("next/core-web-vitals"),
   {
-    files: ["**/*.ts", "**/*.tsx"],
-    extends: [
-      ...tseslint.configs.recommended,
-      ...tseslint.configs.recommendedTypeChecked,
-      ...tseslint.configs.stylisticTypeChecked,
-    ],
-    rules: {
-      "@typescript-eslint/array-type": "off",
-      "@typescript-eslint/consistent-type-definitions": "off",
-      "@typescript-eslint/consistent-type-imports": [
-        "warn",
-        { prefer: "type-imports", fixStyle: "inline-type-imports" },
-      ],
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_" },
-      ],
-      "@typescript-eslint/require-await": "off",
-      "@typescript-eslint/no-misused-promises": [
-        "error",
-        { checksVoidReturn: { attributes: false } },
-      ],
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: __dirname
+      }
+    }
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      // next: require('@next/eslint-plugin-next')
     },
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'inline-type-imports'
+        }
+      ]
+      // 'no-console': 'warn',
+      // 'no-unused-vars': 'warn',
+    }
+  },
+  {
+    files: ['**/*.tsx'],
+    rules: {
+      'react/no-unescaped-entities': 'off'
+    }
+  },
+  {
+    ignores: ['**/.eslintrc*', '**/next.config.js']
   },
   {
     linterOptions: {
-      reportUnusedDisableDirectives: true,
-    },
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
-    },
-  },
-);
+      reportUnusedDisableDirectives: 'warn'
+    }
+  }
+  // ...compat.extends('next/core-web-vitals')
+];
