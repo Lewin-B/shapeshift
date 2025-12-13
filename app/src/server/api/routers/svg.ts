@@ -67,23 +67,18 @@ export const svgRouter = createTRPCRouter({
             },
           };
 
-          console.log("hello 4");
-
           // Upload the file
           await blob.save(fileBuffer, {
             metadata,
             resumable: false,
           });
-          console.log("hello 5");
 
           // Make the file public
           try {
             await blob.makePublic();
-            console.log("hello 6");
 
             // Generate the public URL
             const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
-            console.log("Hello 7");
 
             // Optionally store the file reference in your database here
 

@@ -38,7 +38,6 @@ export default function SvgGeneratorCard() {
       });
 
       const generatedFileUrl = result.publicUrl;
-      console.log("Generated SVG URL:", generatedFileUrl);
 
       setGenerationStatus(
         "Generation successful! Redirecting to playground...",
